@@ -1,0 +1,59 @@
+{
+  "project": "Reasoning_Trace_with_Craft_frm_EmergenceAI",
+  "teacher": {
+    "agent_name": "Sol",
+    "requested_label": "Codex (GPT 5.6 Sol)",
+    "model_env": "CODEX_TEACHER_MODEL",
+    "output_kind": "auditable_decision_summary",
+    "use_hidden_chain_of_thought": false
+  },
+  "student": {
+    "model": "Qwen/Qwen3.5-9B",
+    "license": "Apache-2.0"
+  },
+  "craft": {
+    "documentation_mcp": "https://docs.emergence.ai/mcp",
+    "domains": ["data_catalog", "workflow", "agent_registry"],
+    "tenant_mutations_enabled": false
+  },
+  "nebius": {
+    "base_url": "https://api.tokenfactory.nebius.com/v1/",
+    "fine_tuning_supported_as_of_2026_07_11": false,
+    "documented_qwen35_model": "Qwen/Qwen3.5-27B",
+    "training": {
+      "suffix": "craft-reasoning-traces",
+      "seed": 42,
+      "validation_fraction": 0.1,
+      "hyperparameters": {
+        "batch_size": 8,
+        "learning_rate": 0.00001,
+        "n_epochs": 3,
+        "warmup_ratio": 0.0,
+        "weight_decay": 0.0,
+        "lora": true,
+        "lora_r": 16,
+        "lora_alpha": 16,
+        "lora_dropout": 0.05,
+        "packing": true,
+        "max_grad_norm": 1.0,
+        "context_length": 8192
+      }
+    }
+  },
+  "evaluations": {
+    "harness": "lm-evaluation-harness",
+    "tasks": ["gsm8k", "mmlu", "arc_challenge", "gpqa_diamond_cot_zeroshot"],
+    "limit": 100,
+    "apply_chat_template": true,
+    "generation": {
+      "temperature": 0.6,
+      "top_p": 0.95,
+      "top_k": 20
+    },
+    "tool_harness": {
+      "cases": 7,
+      "required_tools": ["python", "web_search"]
+    }
+  }
+}
+

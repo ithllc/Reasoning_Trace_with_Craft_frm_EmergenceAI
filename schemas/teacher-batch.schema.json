@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["teacher", "examples"],
+  "properties": {
+    "teacher": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["agent_name", "model_label"],
+      "properties": {
+        "agent_name": { "const": "Sol" },
+        "model_label": { "type": "string" }
+      }
+    },
+    "examples": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "domain", "messages", "trace"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "domain": { "enum": ["data_catalog", "workflow", "agent_registry"] },
+          "messages": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["role", "content"],
+              "properties": {
+                "role": { "enum": ["system", "user", "assistant", "tool"] },
+                "content": { "type": "string" }
+              }
+            }
+          },
+          "trace": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["decision_summary", "evidence_refs", "tool_calls", "validation"],
+            "properties": {
+              "decision_summary": { "type": "string", "minLength": 1 },
+              "evidence_refs": { "type": "array", "items": { "type": "string" } },
+              "tool_calls": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["tool", "purpose", "outcome"],
+                  "properties": {
+                    "tool": { "type": "string" },
+                    "purpose": { "type": "string" },
+                    "outcome": { "type": "string" }
+                  }
+                }
+              },
+              "validation": { "enum": ["passed", "needs_review"] }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+

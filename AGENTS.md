@@ -11,6 +11,8 @@ Help the user design auditable reasoning traces that relate to four CRAFT domain
 3. Agent Registry
 4. Service Registry
 
+Use those traces to create safe distillation examples for the Qwen3.5-9B student and automate Nebius Token Factory fine-tuning without silently changing the requested model.
+
 ## Working rules
 
 - Use the `emergence-craft` MCP server before making claims about current CRAFT concepts or APIs.
@@ -21,6 +23,8 @@ Help the user design auditable reasoning traces that relate to four CRAFT domain
 - Never write credentials, bearer tokens, private source rows, or secrets into repository files.
 - Start with a single small example and validate it before generalizing.
 - Ask before making calls that mutate a live CRAFT deployment.
+- Treat Nebius uploads, fine-tuning job creation, deployment, and deletion as explicit live mutations.
+- Keep the Qwen3.5-9B Nebius support gate closed until the exact model appears in current official fine-tuning documentation and the authenticated account supports it.
 
 ## Deliverable convention
 

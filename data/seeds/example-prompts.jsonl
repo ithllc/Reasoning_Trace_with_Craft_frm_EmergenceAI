@@ -1,0 +1,4 @@
+{"id":"catalog-001","domain":"data_catalog","prompt":"Given a cataloged analytics table, identify the metadata and policy evidence required before an agent may use it for a customer-facing answer."}
+{"id":"workflow-001","domain":"workflow","prompt":"Design a trace for a profiling workflow run that retries one failed step and produces a validated artifact."}
+{"id":"agent-001","domain":"agent_registry","prompt":"Select a registered agent skill for a schema-enrichment task and explain the selection using agent-card evidence."}
+

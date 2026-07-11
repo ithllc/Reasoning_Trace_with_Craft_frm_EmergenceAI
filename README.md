@@ -2,6 +2,8 @@
 
 This workspace is the home for designing auditable reasoning traces with Codex (agent name: **Sol**) and the Emergence.ai CRAFT documentation MCP server.
 
+It now also contains a gated automation pipeline for distilling those traces into `Qwen/Qwen3.5-9B` and fine-tuning through Nebius Token Factory. Start with [the automation guide](docs/automation.md) and [tool inventory](docs/tool-inventory.md).
+
 ## Where everything lives
 
 | Item | Location | Purpose |
@@ -13,6 +15,8 @@ This workspace is the home for designing auditable reasoning traces with Codex (
 | Trace contract | `schemas/reasoning-trace.schema.json` | Defines the shared auditable trace format |
 | Domain designs | `designs/<domain>/design.yaml` | Captures each catalog or registry design |
 | Worked traces | `examples/` | Holds example trace instances as they are created |
+| Fine-tuning configuration | `config/pipeline.json` | Pins teacher, student, CRAFT, Nebius, and eval settings |
+| Automation CLI | `scripts/pipeline.py` | Generates, validates, submits, monitors, and evaluates |
 
 The server is also registered in `/root/.codex/config.toml` under the name `emergence-craft`, so it is available outside this workspace too. That user file is managed by `codex mcp` commands; the project copy is the version-controlled declaration for this workspace.
 
