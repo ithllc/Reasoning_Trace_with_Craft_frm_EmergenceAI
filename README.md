@@ -147,6 +147,10 @@ codex mcp list
 codex mcp remove emergence-craft
 ```
 
+## License
+
+Licensed under the [GNU Affero General Public License v3.0 only](LICENSE). Network users of a modified version must be offered its corresponding source code under the same license.
+
 ## Safety rule
 
 Store concise decision summaries and evidence references, never private chain-of-thought, passwords, access tokens, raw secrets, or sensitive source records.
