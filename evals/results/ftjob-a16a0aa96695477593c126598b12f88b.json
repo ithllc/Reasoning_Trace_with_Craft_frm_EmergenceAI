@@ -9,6 +9,11 @@
   "trained_steps": 3,
   "total_steps": 3,
   "trained_tokens": 1437,
+  "checkpoint_metrics": [
+    {"step": 1, "train_loss": 4.3061604499816895, "validation_loss": 4.103560447692871},
+    {"step": 2, "train_loss": 4.303074836730957, "validation_loss": 4.08494234085083},
+    {"step": 3, "train_loss": 4.29697847366333, "validation_loss": 4.080921173095703}
+  ],
   "hyperparameters": {
     "batch_size": 16,
     "context_length": 8192,

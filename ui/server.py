@@ -26,6 +26,8 @@ def dashboard() -> dict:
     manifest = pipeline.load_json(manifest_path) if manifest_path.exists() else None
     examples = pipeline.read_jsonl(TEACHER_DATA) if TEACHER_DATA.exists() else []
     evaluations = pipeline.load_json(ROOT / "evals" / "qwythos-suite.json")
+    result_path = ROOT / "evals" / "results" / "ftjob-a16a0aa96695477593c126598b12f88b.json"
+    training_result = pipeline.load_json(result_path) if result_path.exists() else None
     try:
         jobs = pipeline.api_request("GET", "fine_tuning/jobs?limit=20").get("data", [])
         jobs_error = None
@@ -45,6 +47,7 @@ def dashboard() -> dict:
             "decision_summary": row.get("metadata", {}).get("trace", {}).get("decision_summary"),
         } for row in examples],
         "evaluations": evaluations,
+        "training_result": training_result,
         "jobs": [{
             key: job.get(key) for key in (
                 "id", "model", "status", "created_at", "finished_at", "trained_steps", "total_steps", "trained_tokens", "error"

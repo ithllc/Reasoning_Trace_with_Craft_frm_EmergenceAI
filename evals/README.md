@@ -48,6 +48,8 @@ Results belong in `evals/results/` and should include the base-model result, LoR
 
 The first LoRA pipeline-validation run succeeded as job `ftjob-a16a0aa96695477593c126598b12f88b` in 3 steps and 1,437 trained tokens. Its benchmark status remains pending and its promotion decision is `not_promoted` until the base and adapter complete the full suite.
 
+Checkpoint diagnostics improved modestly during that run: training loss decreased from 4.3062 to 4.2970 and validation loss decreased from 4.1036 to 4.0809. Lower loss is better, but these losses measure next-token prediction on the tiny train/validation splits; they are not GSM8K, MMLU, ARC, GPQA, or CRAFT benchmark scores.
+
 ## Sources
 
 - [Qwythos source model card](https://huggingface.co/empero-ai/Qwythos-9B-Claude-Mythos-5-1M)

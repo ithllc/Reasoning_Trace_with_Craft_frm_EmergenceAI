@@ -198,8 +198,9 @@ def command_nebius_capabilities(_: argparse.Namespace) -> int:
 
 def command_student_smoke(args: argparse.Namespace) -> int:
     config = load_json(args.config)
+    model = args.model or config["student"]["model"]
     request = {
-        "model": config["student"]["model"],
+        "model": model,
         "messages": [
             {"role": "system", "content": "You are a concise CRAFT GitHub catalog analyst. Give an auditable decision summary, cite supplied catalog fields, and never invent tool results or hidden chain-of-thought."},
             {"role": "user", "content": "A GITHUB_REPOS.SAMPLE_REPOS asset has repo_name and watch_count fields, but no recorded freshness or quality validation. May it be used directly in a customer-facing answer?"},
@@ -209,7 +210,7 @@ def command_student_smoke(args: argparse.Namespace) -> int:
     }
     result = api_request("POST", "chat/completions", body=json.dumps(request).encode(), content_type="application/json")
     print(json.dumps({
-        "model": result.get("model", config["student"]["model"]),
+        "model": result.get("model", model),
         "answer": result["choices"][0]["message"]["content"],
         "usage": result.get("usage"),
     }, indent=2))
@@ -355,6 +356,12 @@ def command_list_jobs(_: argparse.Namespace) -> int:
     return 0
 
 
+def command_checkpoints(args: argparse.Namespace) -> int:
+    result = api_request("GET", f"fine_tuning/jobs/{args.job_id}/checkpoints")
+    print(json.dumps(result, indent=2))
+    return 0
+
+
 def command_eval(args: argparse.Namespace) -> int:
     config = load_json(args.config)["evaluations"]
     gen = config["generation"]
@@ -377,7 +384,9 @@ def parser() -> argparse.ArgumentParser:
     commands.add_parser("inventory").set_defaults(func=command_inventory)
     commands.add_parser("preflight-nebius").set_defaults(func=command_preflight)
     commands.add_parser("nebius-capabilities").set_defaults(func=command_nebius_capabilities)
-    commands.add_parser("student-smoke").set_defaults(func=command_student_smoke)
+    student_smoke = commands.add_parser("student-smoke")
+    student_smoke.add_argument("--model")
+    student_smoke.set_defaults(func=command_student_smoke)
     generate = commands.add_parser("generate")
     generate.add_argument("--seeds", type=Path, default=ROOT / "data" / "seeds" / "example-prompts.jsonl")
     generate.add_argument("--output", type=Path, default=ROOT / "data" / "generated" / "teacher.jsonl")
@@ -396,6 +405,9 @@ def parser() -> argparse.ArgumentParser:
     monitor.add_argument("--max-seconds", type=int, default=900)
     monitor.set_defaults(func=command_monitor)
     commands.add_parser("list-jobs").set_defaults(func=command_list_jobs)
+    checkpoints = commands.add_parser("checkpoints")
+    checkpoints.add_argument("job_id")
+    checkpoints.set_defaults(func=command_checkpoints)
     evaluate = commands.add_parser("eval")
     evaluate.add_argument("--model", required=True)
     evaluate.add_argument("--output", type=Path, default=ROOT / "artifacts" / "evals")
