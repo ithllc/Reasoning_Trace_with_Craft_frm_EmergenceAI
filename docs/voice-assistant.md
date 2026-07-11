@@ -5,6 +5,8 @@ The optional voice assistant has two local pieces:
 - The browser provides speech-to-text and text-to-speech through the Web Speech API. Audio is not uploaded to this repository. Browser and operating-system speech services may process audio according to their own policies.
 - `ui/voice_server.py` answers questions through a configured Nebius OpenAI-compatible inference model. It fetches fresh dashboard JSON for each question and instructs the model to answer only from that data.
 
+On dashboard load, the browser initializes its speech-recognition object, warms the available speech-synthesis voices, and checks the Q&A subprocess. Three indicators independently report Q&A, microphone/STT, and speaker/TTS readiness. Browsers still require the user's button press before microphone capture; the initialized recognizer starts on that gesture. Successful answers are spoken automatically, and **Read answer** remains available to replay them.
+
 Run `python3 ui/server.py` and `python3 ui/voice_server.py` in separate terminals, then open `http://127.0.0.1:8765`.
 
 Copy the voice settings from `.env.example` into the ignored `.env`. The authenticated catalog and a live 290-token request verified `Qwen/Qwen3-30B-A3B-Instruct-2507` at `$0.10` per million input tokens and `$0.30` per million output tokens; the test cost was approximately `$0.00007`. Re-check prices before long-lived use. The service refuses inference when pricing, the model, or the API key is absent, or when its configured ceiling exceeds `$75`.
