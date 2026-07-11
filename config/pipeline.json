@@ -17,6 +17,7 @@
     "tenant_mcp": "https://nebius.emergence.ai/mcp",
     "project_id": "8c5c41d7-19e0-45ba-8bf6-57fc2706bf1b",
     "oauth_client_id": "em-runtime-mcp",
+    "demo_connection": "github-repos-8c5c41d7",
     "domains": ["data_catalog", "workflow", "agent_registry"],
     "tenant_mutations_enabled": false
   },

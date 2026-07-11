@@ -61,6 +61,7 @@ The server is also registered in `/root/.codex/config.toml` under the name `emer
 - Documentation server: `emergence-craft` at `https://docs.emergence.ai/mcp`
 - Nebius project: `aiproject-e00g1a833vjes1bvhv`
 - Nebius API: `https://api.tokenfactory.nebius.com/v1/`
+- Demo catalog: `github-repos-8c5c41d7` (`GITHUB_REPOS`)
 
 The live CRAFT server is the hackathon's supported interface for project-scoped catalog, workflow, SQL, and agent tools. The separate documentation MCP is retained for public product documentation.
 
