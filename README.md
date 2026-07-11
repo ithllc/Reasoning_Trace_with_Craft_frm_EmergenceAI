@@ -25,6 +25,8 @@ It now also contains a gated automation pipeline for distilling those traces int
 | Current teacher dataset | `data/generated/digital-analytics-200-teacher.jsonl` | 200 deterministic auditable examples |
 | Current split | `artifacts/digital-analytics-200-dataset/` | 100 training, 100 validation, manifest, and review |
 | Dashboard and voice UI | `ui/` | Session charts, dataset view, grounded Q&A, STT, and TTS |
+| Enterprise business case | `docs/enterprise-business-case.md` | Use cases, buyer value, proposed pricing, ROI, and Unsloth comparison |
+| Enterprise presentation | `docs/EmergeGPT_Deck_Updated.pptx` | Six-slide simplified executive narrative |
 
 The server is also registered in `/root/.codex/config.toml` under the name `emergence-craft`, so it is available outside this workspace too. That user file is managed by `codex mcp` commands; the project copy is the version-controlled declaration for this workspace.
 
