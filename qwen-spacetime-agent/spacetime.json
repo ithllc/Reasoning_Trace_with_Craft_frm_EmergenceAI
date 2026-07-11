@@ -1,0 +1,5 @@
+{
+  "database": "qwen-agent-jobs",
+  "module-path": "./spacetimedb",
+  "server": "local"
+}

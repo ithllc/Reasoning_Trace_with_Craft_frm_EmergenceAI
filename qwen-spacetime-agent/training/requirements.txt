@@ -1,0 +1,7 @@
+accelerate>=1.12.0
+bitsandbytes>=0.49.0
+datasets>=4.4.0
+peft>=0.18.0
+safetensors>=0.7.0
+torch>=2.7.0
+transformers @ git+https://github.com/huggingface/transformers.git@main
