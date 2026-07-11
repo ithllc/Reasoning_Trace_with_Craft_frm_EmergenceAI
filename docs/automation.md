@@ -31,11 +31,11 @@ Sol / Codex teacher --structured output--> validated JSONL
                             lm-eval + 7-case tool harness
 ```
 
-## Current blocking fact
+## Current training configuration
 
 As of 2026-07-11, Nebius documents the selected Qwen3 MoE model for LoRA and full-parameter fine-tuning, and the authenticated project exposes its exact ID.
 
-The configuration selects LoRA (`lora: true`, rank 16, alpha 16, dropout 0.05) with batch size 16 and context length 8192. The latter pair satisfies Nebius's 131,072 configured-tokens-per-batch minimum. Model eligibility passes, but dataset review remains mandatory before submission.
+The configuration selects LoRA (`lora: true`, rank 16, alpha 16, dropout 0.05) with batch size 16 and context length 8192. The latter pair satisfies Nebius's 131,072 configured-tokens-per-batch minimum. Model eligibility and the current 200-example dataset review pass. New datasets still require their own review record before submission.
 
 ## Hackathon CRAFT connection
 
@@ -88,17 +88,16 @@ It separately reports a seven-prompt tool-use harness using a Python executor an
 # Show tool surfaces
 python3 scripts/pipeline.py inventory
 
-# Generate structured teacher examples (calls Codex and the CRAFT docs MCP)
-python3 scripts/pipeline.py generate
-
-# Validate and split the generated examples
-python3 scripts/pipeline.py prepare --input data/generated/teacher.jsonl
+# Rebuild and split the current Digital Analytics dataset
+python3 scripts/build_digital_analytics_seeds.py
+python3 scripts/pipeline.py prepare --input data/generated/digital-analytics-200-teacher.jsonl --output-dir artifacts/digital-analytics-200-dataset
 
 # Authenticated, read-only check of the Nebius live model catalog
 NEBIUS_API_KEY=... python3 scripts/pipeline.py preflight-nebius
 
-# This remains safely blocked until exact 9B support is verified
-NEBIUS_API_KEY=... python3 scripts/pipeline.py submit
+# Upload and train only after review.json is approved
+NEBIUS_API_KEY=... python3 scripts/pipeline.py submit --dataset-dir artifacts/digital-analytics-200-dataset
+python3 scripts/pipeline.py monitor <job-id> --max-seconds 600
 
 # Print the Qwythos-compatible lm-eval command; add --run to execute it
 python3 scripts/pipeline.py eval --model Qwen/Qwen3-30B-A3B-Instruct-2507
@@ -107,6 +106,10 @@ python3 scripts/pipeline.py eval --model Qwen/Qwen3-30B-A3B-Instruct-2507
 ## Teacher identity
 
 The teacher is pinned to `gpt-5.6-sol`, which is present in this environment's Codex model configuration. `CODEX_TEACHER_MODEL` controls the non-interactive `codex exec` teacher process. Run manifests record the teacher label and model identity.
+
+## Evaluation status
+
+The dashboard contains real train/validation loss for three sessions and published Qwythos reference values. It does not yet contain a fair base-versus-LoRA result. That comparison requires deploying a checkpoint, sending identical held-out prompts to the base and adapter with identical generation settings, and recording both scores. Training loss, validation loss, and Qwythos references must not be relabeled as that comparison.
 
 ## Primary references
 

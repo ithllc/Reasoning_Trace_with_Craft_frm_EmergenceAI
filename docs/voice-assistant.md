@@ -13,4 +13,6 @@ Copy the voice settings from `.env.example` into the ignored `.env`. The authent
 
 Before every request, the service reserves a deliberately conservative estimate using one token per prompt character plus the full output allowance. If that estimate would cross the ceiling, no paid request is sent. After a response, actual API usage updates `runs/voice-budget.json`. Requests are serialized around the budget check so concurrent questions cannot race past the limit.
 
-The ledger enforces a `$50` voice allocation. The remaining `$25` of the user's `$75` project ceiling is reserved for fine-tuning and evaluation, whose duration is bounded by the 30-minute watchdog because the available API does not expose an account-wide dollar stop. Browser STT/TTS is not charged through this Nebius ledger.
+The ledger enforces a `$50` voice allocation. The remaining `$25` of the user's `$75` project ceiling is reserved for fine-tuning and evaluation, whose duration is bounded per run because the available API does not expose an account-wide dollar stop. The latest expanded run used a 600-second guard. Browser STT/TTS is not charged through this Nebius ledger.
+
+The Q&A subprocess currently calls the unmodified base model. It does not call any LoRA checkpoint until that checkpoint is deployed and passes the identical-prompt base-versus-adapter evaluation.

@@ -6,11 +6,13 @@ This separates platform interfaces from functions a trained model may choose to 
 
 | Surface | Use in this project | Access status |
 | --- | --- | --- |
-| Public documentation MCP (`emergence-craft`) | Ground teacher tasks in current CRAFT concepts and API documentation | Connected |
-| Hackathon tenant MCP (`craft`) | Project-scoped database catalog, SQL generation, workflows, and shipped agent tools | Configured; OAuth login required |
-| Assets service / SDK | Data connections, artifacts, files, models, and agent records | Tenant connection required |
-| Agent-card validation and registry | Validate A2A v0.3/v1.0 cards and select agent skills | Tenant connection required |
-| Pipeline/workflow framework | Stateful steps, run state, retries, outputs, cancellation | Tenant connection required |
+| Public documentation MCP (`emergence-craft`) | Ground teacher tasks in current CRAFT concepts and API documentation | Configured for documentation |
+| Hackathon tenant MCP (`craft`) | Project-scoped catalog/schema discovery and read-only query tooling | Connected through OAuth; re-login when expired |
+| Catalog tools | `list_data_connections`, `list_databases`, `get_schema`, and `search_schema` | Used to inventory all nine connections and snapshot Firebase/GA4 |
+| SQL/data tools | SQL generation, read-only execution, paging, terms, charts, and sampling | Available but not used to copy source rows into training data |
+| Assets service / SDK | Data connections, artifacts, files, models, and agent records | Documented surface; not directly used by this demo |
+| Agent-card validation and registry | Validate/select agent skills | Not exposed by the current tenant MCP tool list |
+| Pipeline/workflow framework | Stateful steps, run state, retries, outputs, cancellation | Trace design only; not exposed by the current tenant MCP tool list |
 | Governance/OpenFGA checks | Record authorization outcomes | Tenant connection required |
 | Secrets API | Resolve credentials without placing them in traces | Tenant connection required |
 | Langfuse and OpenTelemetry | LLM and cross-service operational traces | Deployment/configuration required |
@@ -33,3 +35,5 @@ CRAFT's public guide says there is no Backstage-style service catalog today. Do 
 | Dedicated endpoints | Host eligible custom weights with controlled capacity |
 
 Nebius models emit tool-call instructions; the application executes the tool and returns its result. The initial model evaluation tool set is `python` and `web_search`, matching Qwythos's published custom harness. CRAFT-specific evaluation later adds read-only asset lookup, workflow status, agent discovery, and permission-check tools.
+
+The active inference and fine-tuning model is `Qwen/Qwen3-30B-A3B-Instruct-2507`. Dashboard Q&A uses the base serverless model, not a trained LoRA checkpoint. The voice service enforces a local `$50` ledger; training uses separately configured wall-clock guards.

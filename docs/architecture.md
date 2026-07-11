@@ -2,21 +2,24 @@
 
 ## The simple mental model
 
-Codex is the design environment. **Sol** is the name used for the Codex agent in this workspace. The CRAFT MCP server supplies current public documentation. The files in this repository hold the designs. A future CRAFT tenant connection will supply and receive real operational data.
+Codex is the design environment and **Sol** is the teacher agent. The authenticated CRAFT tenant MCP supplies project-scoped catalog metadata; the public CRAFT MCP supplies product documentation. The repository stores read-only catalog snapshots, auditable traces, deterministic datasets, Nebius run records, and dashboard code.
 
 ```text
-You -> Sol in Codex -> CRAFT documentation MCP
-                 |
-                 +-> versioned designs and example traces
-                 |
-                 +-> future authenticated CRAFT tenant connection
+You -> Sol in Codex -> authenticated CRAFT tenant MCP
+                 |                 |
+                 |                 +-> Firebase + GA4 metadata
+                 +-> 200 trace examples -> 100 train / 100 validation
+                                           |
+                                           +-> Nebius Qwen3 LoRA
+                                                        |
+                                                        +-> run history + UI
 ```
 
 ## What a reasoning trace means here
 
 A reasoning trace is an auditable record of what an agent or workflow did. It includes the request, relevant asset identifiers, evidence references, tool calls, policy checks, a concise decision summary, output, and validation status. It intentionally excludes hidden chain-of-thought.
 
-## Four domain views
+## Domain views
 
 | Domain | Question the trace answers | Likely trace keys |
 | --- | --- | --- |
@@ -26,6 +29,8 @@ A reasoning trace is an auditable record of what an agent or workflow did. It in
 | Service Registry | Which runtime service fulfilled a call? | service, version, environment, endpoint, health |
 
 CRAFT's public documentation describes Assets for agents, data connections, artifacts, files, and models; Prefect-backed workflows in Data Governance; and A2A agent cards. The public solution guide also says there is not yet a Backstage-style service catalog. Therefore, the Service Registry design in this workspace is initially a proposed abstraction and must not be represented as an existing CRAFT API until the MCP documentation confirms one.
+
+The active demo category is **Digital Analytics**. All nine tenant connections were inventoried; Firebase and GA4 were selected from their live descriptions. Firebase supplies mobile-app interaction metadata, while GA4 supplies e-commerce events, sessions, engagement, purchase, and conversion metadata. No source rows are committed or used in traces.
 
 ## Trace lifecycle
 
@@ -37,15 +42,12 @@ CRAFT's public documentation describes Assets for agents, data connections, arti
 6. Validation marks the trace `passed`, `failed`, or `needs_review`.
 7. Related domain traces link to one another using trace IDs.
 
-## Next connection milestone
+## Current runtime boundaries
 
-The current MCP server searches public documentation. To work against a real CRAFT installation, collect these without committing secrets:
-
-- CRAFT tenant/base URL
-- organization and project identifiers
-- authentication method (for example OIDC/JWT)
-- the user's role and allowed operations
-- relevant Assets, workflow, agent, and service endpoints
-- a safe secret-injection method
-
-Use environment variables or the platform secret manager for secret values.
+- Tenant metadata access is authenticated with Keycloak PKCE and scoped by `X-Project-ID`.
+- Catalog discovery and schema retrieval are read-only.
+- Workflow and agent-registry operations in examples are proposed trace conventions unless a live tool proves otherwise.
+- Fine-tuning submission is an explicit Nebius mutation with a wall-clock cancellation guard.
+- Completed datasets and sessions are immutable in the dashboard.
+- The LoRA checkpoints are trained but not promoted; identical-prompt base-versus-LoRA evaluation remains pending adapter deployment.
+- Credentials remain only in ignored `.env` and Codex's OAuth cache.
