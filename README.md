@@ -144,6 +144,8 @@ The dashboard uses the browser Web Speech API for speech-to-text and text-to-spe
 
 Voice capabilities initialize during dashboard load. Separate indicators show whether Q&A inference, microphone/STT, and speaker/TTS are ready. Pressing **Ask by voice** starts the pre-initialized recognizer, and every successful answer is read aloud automatically; **Read answer** replays it.
 
+Architecture, catalog, and platform-feature questions use a whitelisted repository knowledge bundle containing the README, project guides, pipeline configuration, evaluation results, and dataset manifests/reviews. Answers cite repository paths and label features as used, available, or pending; credentials, raw datasets, and arbitrary files are excluded.
+
 The first bounded LoRA pipeline-validation job, `ftjob-a16a0aa96695477593c126598b12f88b`, completed successfully in 3 steps and 1,437 trained tokens. It is not promoted until checkpoint evaluations pass; see `evals/results/`.
 
 Three sessions are recorded: the initial 3-example validation run, an 8-example Digital Analytics run, and the current 200-example run. The latest job `ftjob-4bfaa9ef51994ed5bd1924f58d686c2e` trained on 100 examples, validated on 100, processed 76,875 tokens, and succeeded in 509 seconds under its 600-second limit.

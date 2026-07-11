@@ -14,6 +14,16 @@ from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
 LEDGER_LOCK = threading.Lock()
+KNOWLEDGE_FILES = (
+    "README.md",
+    "docs/architecture.md",
+    "docs/automation.md",
+    "docs/tool-inventory.md",
+    "docs/voice-assistant.md",
+    "config/pipeline.json",
+    "evals/README.md",
+    "evals/qwythos-suite.json",
+)
 
 
 def load_dotenv() -> None:
@@ -67,6 +77,19 @@ def token_cost(config: dict, input_tokens: int, output_tokens: int) -> float:
     ) / 1_000_000
 
 
+def project_knowledge() -> dict[str, str]:
+    """Load only explicitly approved project documentation and run metadata."""
+    paths = [ROOT / relative for relative in KNOWLEDGE_FILES]
+    paths.extend(sorted((ROOT / "evals" / "results").glob("*.json")))
+    for directory in ("artifacts/dataset", "artifacts/digital-analytics-dataset", "artifacts/digital-analytics-200-dataset"):
+        paths.extend(sorted((ROOT / directory).glob("manifest.json")))
+        paths.extend(sorted((ROOT / directory).glob("review.json")))
+    return {
+        str(path.relative_to(ROOT)): path.read_text(encoding="utf-8")
+        for path in paths if path.is_file()
+    }
+
+
 def public_status(config: dict | None = None) -> dict:
     config = config or settings()
     with LEDGER_LOCK:
@@ -83,6 +106,7 @@ def public_status(config: dict | None = None) -> dict:
         "budget_usd": config["max_usd"],
         "remaining_usd": round(max(0, config["max_usd"] - float(ledger.get("spent_usd", 0))), 6),
         "requests": int(ledger.get("requests", 0)),
+        "knowledge_sources": list(project_knowledge()),
     }
 
 
@@ -95,14 +119,28 @@ def ask(question: str, config: dict | None = None) -> dict:
         raise RuntimeError("Voice inference is disabled: configure model, API key, positive pricing, and a budget no greater than $75.")
 
     dashboard = read_json_url(config["dashboard_url"], timeout=10)
+    examples = dashboard.pop("examples", [])
+    dashboard["example_summary"] = {
+        "count": len(examples),
+        "domains": sorted({item.get("domain") for item in examples if item.get("domain")}),
+        "policy_outcomes": sorted({item.get("validation") for item in examples if item.get("validation")}),
+    }
     dashboard_text = json.dumps(dashboard, separators=(",", ":"), ensure_ascii=True)
+    knowledge = project_knowledge()
+    knowledge_text = "\n\n".join(f"SOURCE: {path}\n{content}" for path, content in knowledge.items())
     messages = [
         {"role": "system", "content": (
-            "You explain the CRAFT Reasoning Lab dashboard. Answer only from the dashboard JSON supplied. "
-            "Be concise, define technical terms in plain language, distinguish training loss from benchmark scores, "
-            "and say when the dashboard does not contain the answer. Never expose credentials."
+            "You explain the CRAFT Reasoning Lab dashboard and project architecture. Answer only from the supplied "
+            "dashboard JSON and whitelisted repository sources. Cite supporting repository paths inline in square "
+            "brackets, such as [docs/architecture.md]. Distinguish features actually used, features merely available, "
+            "and planned or pending work. Treat config and result JSON as authoritative when narrative docs conflict. "
+            "Be concise, define technical terms plainly, distinguish loss from benchmark scores, say when evidence is "
+            "absent, and never expose or request credentials."
         )},
-        {"role": "user", "content": f"DASHBOARD JSON:\n{dashboard_text}\n\nQUESTION:\n{question.strip()}"},
+        {"role": "user", "content": (
+            f"DASHBOARD JSON:\n{dashboard_text}\n\nPROJECT SOURCES:\n{knowledge_text}"
+            f"\n\nQUESTION:\n{question.strip()}"
+        )},
     ]
     # Conservative pre-call reservation: approximate all prompt characters at one token each.
     estimated_input = sum(len(item["content"]) for item in messages)

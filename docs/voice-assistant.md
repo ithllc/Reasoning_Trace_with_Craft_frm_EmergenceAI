@@ -16,3 +16,13 @@ Before every request, the service reserves a deliberately conservative estimate 
 The ledger enforces a `$50` voice allocation. The remaining `$25` of the user's `$75` project ceiling is reserved for fine-tuning and evaluation, whose duration is bounded per run because the available API does not expose an account-wide dollar stop. The latest expanded run used a 600-second guard. Browser STT/TTS is not charged through this Nebius ledger.
 
 The Q&A subprocess currently calls the unmodified base model. It does not call any LoRA checkpoint until that checkpoint is deployed and passes the identical-prompt base-versus-adapter evaluation.
+
+## Grounded project knowledge
+
+Questions about architecture, Digital Analytics catalogs, and platform features are grounded in an explicit allowlist: `README.md`, all four project guides in `docs/`, `config/pipeline.json`, the evaluation guide/configuration/results, and dataset manifest/review JSON. Raw datasets, `.env`, OAuth credentials, and arbitrary workspace files are excluded. The dashboard status shows how many sources loaded.
+
+Answers must cite repository paths and distinguish:
+
+- **used:** CRAFT catalog discovery/schema metadata, Firebase/GA4 snapshots, Nebius model discovery, file upload, LoRA jobs, monitoring, checkpoints, and base-model inference;
+- **available:** tools documented or exposed but not exercised by this workflow;
+- **pending:** LoRA deployment, identical-prompt base-versus-adapter scoring, and promotion.

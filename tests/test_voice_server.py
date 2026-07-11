@@ -51,6 +51,14 @@ class VoiceServerTests(unittest.TestCase):
             self.assertEqual(ledger["requests"], 1)
             self.assertAlmostEqual(ledger["spent_usd"], 0.00012)
 
+    def test_project_knowledge_is_whitelisted_and_includes_run_records(self):
+        knowledge = voice_server.project_knowledge()
+        self.assertIn("README.md", knowledge)
+        self.assertIn("docs/architecture.md", knowledge)
+        self.assertIn("config/pipeline.json", knowledge)
+        self.assertTrue(any(path.startswith("evals/results/") for path in knowledge))
+        self.assertFalse(any(path.endswith(".env") for path in knowledge))
+
 
 if __name__ == "__main__":
     unittest.main()
