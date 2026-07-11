@@ -1,0 +1,28 @@
+{
+  "job_id": "ftjob-a16a0aa96695477593c126598b12f88b",
+  "status": "succeeded",
+  "model": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+  "method": "LoRA",
+  "dataset_manifest_sha256": "cc0f8b7d6c6c80d52609ea49ac0882d550f85b2145b848a1815ea716a39e2718",
+  "train_examples": 2,
+  "validation_examples": 1,
+  "trained_steps": 3,
+  "total_steps": 3,
+  "trained_tokens": 1437,
+  "hyperparameters": {
+    "batch_size": 16,
+    "context_length": 8192,
+    "learning_rate": 0.00001,
+    "n_epochs": 3,
+    "lora_r": 16,
+    "lora_alpha": 16,
+    "lora_dropout": 0.05,
+    "packing": true
+  },
+  "evaluations": {
+    "qwythos_compatible_suite": "pending_checkpoint_evaluation",
+    "craft_held_out_suite": "pending_checkpoint_evaluation",
+    "promotion_decision": "not_promoted"
+  },
+  "note": "Pipeline-validation run on a minimal approved dataset; not a production-quality adapter."
+}

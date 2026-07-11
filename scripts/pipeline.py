@@ -330,13 +330,29 @@ def command_submit(args: argparse.Namespace) -> int:
 
 
 def command_monitor(args: argparse.Namespace) -> int:
+    started = time.monotonic()
     while True:
         job = api_request("GET", f"fine_tuning/jobs/{args.job_id}")
         print(json.dumps({"status": job.get("status"), "trained_steps": job.get("trained_steps"), "total_steps": job.get("total_steps")}), flush=True)
         if job.get("status") in {"succeeded", "failed", "cancelled"}:
             dump_json(ROOT / "runs" / args.job_id / "final.json", job)
             return 0 if job.get("status") == "succeeded" else 2
+        if time.monotonic() - started >= args.max_seconds:
+            cancelled = api_request("POST", f"fine_tuning/jobs/{args.job_id}/cancel")
+            dump_json(ROOT / "runs" / args.job_id / "cancelled-at-time-limit.json", cancelled)
+            print(json.dumps({"status": cancelled.get("status"), "reason": "15-minute wall-clock limit"}), flush=True)
+            return 2
         time.sleep(args.interval)
+
+
+def command_list_jobs(_: argparse.Namespace) -> int:
+    jobs = api_request("GET", "fine_tuning/jobs?limit=20")
+    print(json.dumps([{
+        "id": job.get("id"), "model": job.get("model"), "status": job.get("status"),
+        "created_at": job.get("created_at"), "trained_steps": job.get("trained_steps"),
+        "total_steps": job.get("total_steps"), "lora": job.get("hyperparameters", {}).get("lora"),
+    } for job in jobs.get("data", [])], indent=2))
+    return 0
 
 
 def command_eval(args: argparse.Namespace) -> int:
@@ -377,7 +393,9 @@ def parser() -> argparse.ArgumentParser:
     monitor = commands.add_parser("monitor")
     monitor.add_argument("job_id")
     monitor.add_argument("--interval", type=int, default=15)
+    monitor.add_argument("--max-seconds", type=int, default=900)
     monitor.set_defaults(func=command_monitor)
+    commands.add_parser("list-jobs").set_defaults(func=command_list_jobs)
     evaluate = commands.add_parser("eval")
     evaluate.add_argument("--model", required=True)
     evaluate.add_argument("--output", type=Path, default=ROOT / "artifacts" / "evals")

@@ -35,7 +35,7 @@ Sol / Codex teacher --structured output--> validated JSONL
 
 As of 2026-07-11, Nebius documents the selected Qwen3 MoE model for LoRA and full-parameter fine-tuning, and the authenticated project exposes its exact ID.
 
-The configuration selects LoRA (`lora: true`, rank 16, alpha 16, dropout 0.05). Model eligibility passes, but dataset review remains mandatory before submission.
+The configuration selects LoRA (`lora: true`, rank 16, alpha 16, dropout 0.05) with batch size 16 and context length 8192. The latter pair satisfies Nebius's 131,072 configured-tokens-per-batch minimum. Model eligibility passes, but dataset review remains mandatory before submission.
 
 ## Hackathon CRAFT connection
 

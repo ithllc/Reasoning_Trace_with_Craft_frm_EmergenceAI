@@ -46,6 +46,8 @@ Every candidate checkpoint must pass all held-out CRAFT cases:
 
 Results belong in `evals/results/` and should include the base-model result, LoRA result, configuration hash, dataset manifest hash, and promotion decision.
 
+The first LoRA pipeline-validation run succeeded as job `ftjob-a16a0aa96695477593c126598b12f88b` in 3 steps and 1,437 trained tokens. Its benchmark status remains pending and its promotion decision is `not_promoted` until the base and adapter complete the full suite.
+
 ## Sources
 
 - [Qwythos source model card](https://huggingface.co/empero-ai/Qwythos-9B-Claude-Mythos-5-1M)

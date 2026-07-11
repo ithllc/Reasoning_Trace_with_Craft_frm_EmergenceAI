@@ -1,9 +1,9 @@
 {
-  "created_at": "2026-07-11T19:37:10.420293+00:00",
+  "created_at": "2026-07-11T20:17:09.782595+00:00",
   "seed": 42,
-  "source": "data/generated/teacher.jsonl",
-  "source_sha256": "5edf24887dd2ea6cec5bd4e75a24440a845322ab20acf421a43853600e5ad348",
-  "student_model": "Qwen/Qwen3.5-9B",
+  "source": "/llm_models_python_code_src/emergence-craft-reasoning/data/generated/teacher.jsonl",
+  "source_sha256": "cc0f8b7d6c6c80d52609ea49ac0882d550f85b2145b848a1815ea716a39e2718",
+  "student_model": "Qwen/Qwen3-30B-A3B-Instruct-2507",
   "train_examples": 2,
   "validation_examples": 1
 }

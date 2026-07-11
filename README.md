@@ -91,6 +91,8 @@ python3 scripts/pipeline.py eval --model Qwen/Qwen3-30B-A3B-Instruct-2507
 
 Nebius model eligibility now passes. Dataset quality remains the submission gate: the initial three-example batch is marked `needs_review` and will not be used for a paid LoRA job until reviewed examples and held-out evaluations are ready.
 
+Fine-tuning demo runs have a strict 15-minute wall-clock monitor limit. `python3 scripts/pipeline.py monitor <job-id>` polls no faster than every 15 seconds and calls the Nebius cancellation endpoint if the job is still active at 900 seconds.
+
 The verified CRAFT GitHub snapshot currently contains one schema, six tables, and 30 columns. The first Sol batch contains catalog, workflow, and agent-registry examples. Examples without live CRAFT evidence are labeled `needs_review` and are not approved for training automatically. The hackathon MCP currently exposes catalog/schema, SQL generation and execution, result retrieval, terminology, chart, and sampling tools; it does not expose workflow or agent-registry tools.
 
 ## Team dataset review
@@ -106,6 +108,18 @@ The reviewable teacher batch and its grounding evidence are committed so collabo
 Reviewers should verify correctness, evidence references, policy decisions, tool outcomes, privacy, and absence of invented APIs before changing an example from `needs_review` to `passed`.
 
 The evaluation suite is visible in `evals/README.md` and `evals/qwythos-suite.json`. It shows the published Qwythos reference metrics, exact harness settings, tool-use criteria, and mandatory CRAFT promotion gates.
+
+## Local management UI
+
+Run the local-only dashboard:
+
+```bash
+python3 ui/server.py
+```
+
+Open `http://127.0.0.1:8765`. The UI shows teacher/student configuration, review status, dataset metadata, live Nebius jobs, LoRA settings, and LLM evaluations. It can approve/reset examples and cancel active jobs. It binds only to localhost and never returns API keys or OAuth tokens.
+
+The first bounded LoRA pipeline-validation job, `ftjob-a16a0aa96695477593c126598b12f88b`, completed successfully in 3 steps and 1,437 trained tokens. It is not promoted until checkpoint evaluations pass; see `evals/results/`.
 
 ## Useful commands
 
