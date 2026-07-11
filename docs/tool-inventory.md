@@ -7,6 +7,7 @@ This separates platform interfaces from functions a trained model may choose to 
 | Surface | Use in this project | Access status |
 | --- | --- | --- |
 | Public documentation MCP (`emergence-craft`) | Ground teacher tasks in current CRAFT concepts and API documentation | Connected |
+| Hackathon tenant MCP (`craft`) | Project-scoped database catalog, SQL generation, workflows, and shipped agent tools | Configured; OAuth login required |
 | Assets service / SDK | Data connections, artifacts, files, models, and agent records | Tenant connection required |
 | Agent-card validation and registry | Validate A2A v0.3/v1.0 cards and select agent skills | Tenant connection required |
 | Pipeline/workflow framework | Stateful steps, run state, retries, outputs, cancellation | Tenant connection required |
@@ -32,4 +33,3 @@ CRAFT's public guide says there is no Backstage-style service catalog today. Do 
 | Dedicated endpoints | Host eligible custom weights with controlled capacity |
 
 Nebius models emit tool-call instructions; the application executes the tool and returns its result. The initial model evaluation tool set is `python` and `web_search`, matching Qwythos's published custom harness. CRAFT-specific evaluation later adds read-only asset lookup, workflow status, agent discovery, and permission-check tools.
-

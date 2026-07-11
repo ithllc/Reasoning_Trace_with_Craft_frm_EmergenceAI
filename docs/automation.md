@@ -33,6 +33,10 @@ As of 2026-07-11, Nebius's official post-training model list documents `Qwen/Qwe
 
 The target remains 9B. `pipeline.py submit` intentionally fails before uploads or spend while the support gate is false. Recheck both the official supported-model page and the authenticated live model catalog before changing that gate.
 
+## Hackathon CRAFT connection
+
+The live tool endpoint is `https://nebius.emergence.ai/mcp`. Every request is scoped with `X-Project-ID: 8c5c41d7-19e0-45ba-8bf6-57fc2706bf1b`. Codex authenticates through PKCE using public client `em-runtime-mcp`; no OAuth client secret is used. Run `codex mcp login craft` once, then verify catalog access with the CRAFT `list_databases` tool.
+
 ## Qwythos evaluation reproduction
 
 The Qwythos model card reports `lm-evaluation-harness` with the Hugging Face backend, chat template enabled, a 100-example limit, and Qwen sampling (`temperature=0.6`, `top_p=0.95`, `top_k=20`). Its published table covers:
@@ -68,7 +72,7 @@ python3 scripts/pipeline.py eval --model Qwen/Qwen3.5-9B
 
 ## Teacher identity
 
-“Codex (GPT 5.6 Sol)” is stored as the requested teacher label. It is not hard-coded as a model slug because public Codex documentation does not establish that exact slug. By default, `codex exec` uses the authenticated Codex model configured for the environment. Set `CODEX_TEACHER_MODEL` only to a model ID that the installed Codex client actually supports. Run manifests must record both the label and effective model when that information is available.
+The teacher is pinned to `gpt-5.6-sol`, which is present in this environment's Codex model configuration. `CODEX_TEACHER_MODEL` controls the non-interactive `codex exec` teacher process. Run manifests record the teacher label and model identity.
 
 ## Primary references
 

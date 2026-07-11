@@ -27,7 +27,17 @@ class PipelineTests(unittest.TestCase):
             pipeline.write_jsonl(path, value)
             self.assertEqual(value, pipeline.read_jsonl(path))
 
+    def test_dotenv_does_not_override_environment(self):
+        import os
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / ".env"
+            path.write_text("PIPELINE_TEST_VALUE=file\nSECOND_VALUE=loaded\n", encoding="utf-8")
+            os.environ["PIPELINE_TEST_VALUE"] = "process"
+            os.environ.pop("SECOND_VALUE", None)
+            pipeline.load_dotenv(path)
+            self.assertEqual("process", os.environ["PIPELINE_TEST_VALUE"])
+            self.assertEqual("loaded", os.environ["SECOND_VALUE"])
+
 
 if __name__ == "__main__":
     unittest.main()
-

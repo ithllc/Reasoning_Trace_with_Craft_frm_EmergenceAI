@@ -15,7 +15,7 @@ Use those traces to create safe distillation examples for the Qwen3.5-9B student
 
 ## Working rules
 
-- Use the `emergence-craft` MCP server before making claims about current CRAFT concepts or APIs.
+- Use the live `craft` MCP server for project-scoped catalog, workflow, and agent evidence. Use `emergence-craft` for current public documentation.
 - Distinguish documented CRAFT behavior from a proposed workspace convention.
 - Treat the public CRAFT MCP as documentation access, not tenant data access.
 - Use `schemas/reasoning-trace.schema.json` as the common trace envelope.

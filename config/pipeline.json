@@ -3,6 +3,7 @@
   "teacher": {
     "agent_name": "Sol",
     "requested_label": "Codex (GPT 5.6 Sol)",
+    "verified_model_id": "gpt-5.6-sol",
     "model_env": "CODEX_TEACHER_MODEL",
     "output_kind": "auditable_decision_summary",
     "use_hidden_chain_of_thought": false
@@ -13,11 +14,15 @@
   },
   "craft": {
     "documentation_mcp": "https://docs.emergence.ai/mcp",
+    "tenant_mcp": "https://nebius.emergence.ai/mcp",
+    "project_id": "8c5c41d7-19e0-45ba-8bf6-57fc2706bf1b",
+    "oauth_client_id": "em-runtime-mcp",
     "domains": ["data_catalog", "workflow", "agent_registry"],
     "tenant_mutations_enabled": false
   },
   "nebius": {
     "base_url": "https://api.tokenfactory.nebius.com/v1/",
+    "project_id": "aiproject-e00g1a833vjes1bvhv",
     "fine_tuning_supported_as_of_2026_07_11": false,
     "documented_qwen35_model": "Qwen/Qwen3.5-27B",
     "training": {
@@ -56,4 +61,3 @@
     }
   }
 }
-

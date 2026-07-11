@@ -12,6 +12,7 @@ import subprocess
 import sys
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 import uuid
 from datetime import datetime, timezone
@@ -20,6 +21,21 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CONFIG = ROOT / "config" / "pipeline.json"
+
+
+def load_dotenv(path: Path = ROOT / ".env") -> None:
+    """Load simple KEY=VALUE entries without overriding the process environment."""
+    if not path.exists():
+        return
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        key = key.strip()
+        value = value.strip().strip('"').strip("'")
+        if key and key not in os.environ:
+            os.environ[key] = value
 
 
 def load_json(path: Path) -> Any:
@@ -69,7 +85,12 @@ def api_request(method: str, path: str, *, body: bytes | None = None, content_ty
     token = os.environ.get("NEBIUS_API_KEY")
     if not token:
         raise RuntimeError("NEBIUS_API_KEY is required")
-    url = "https://api.tokenfactory.nebius.com/v1/" + path.lstrip("/")
+    base_url = os.environ.get("NEBIUS_BASE_URL", "https://api.tokenfactory.nebius.com/v1/")
+    url = base_url.rstrip("/") + "/" + path.lstrip("/")
+    project_id = os.environ.get("NEBIUS_PROJECT_ID")
+    if project_id:
+        separator = "&" if "?" in url else "?"
+        url += separator + urllib.parse.urlencode({"ai_project_id": project_id})
     headers = {"Authorization": f"Bearer {token}", "Accept": "application/json"}
     if content_type:
         headers["Content-Type"] = content_type
@@ -94,10 +115,12 @@ def command_preflight(args: argparse.Namespace) -> int:
     target = config["student"]["model"]
     result = api_request("GET", "models?verbose=true")
     live_ids = {item.get("id") for item in result.get("data", [])}
+    related_ids = sorted(model_id for model_id in live_ids if isinstance(model_id, str) and "qwen3.5" in model_id.lower())
     report = {
         "checked_at": datetime.now(timezone.utc).isoformat(),
         "target_model": target,
         "present_in_live_model_catalog": target in live_ids,
+        "related_live_model_ids": related_ids,
         "documented_fine_tuning_support": config["nebius"]["fine_tuning_supported_as_of_2026_07_11"],
         "safe_to_submit": target in live_ids and config["nebius"]["fine_tuning_supported_as_of_2026_07_11"],
     }
@@ -110,7 +133,7 @@ def command_generate(args: argparse.Namespace) -> int:
     seeds = read_jsonl(args.seeds)
     output = args.output
     prompt = f"""You are Sol, the Codex teacher for an auditable model-distillation dataset.
-Use the emergence-craft MCP server to verify current public CRAFT terminology for data catalog/assets, workflows, and registered agents.
+Use the live craft MCP server for project-scoped data catalog, workflow, and registered-agent evidence. Use emergence-craft only for public documentation when needed.
 Create one high-quality example for every seed below. Return only JSON matching the supplied output schema.
 Use concise decision summaries, evidence references, and tool-call summaries. Do not expose or request hidden chain-of-thought.
 Never include credentials, private tenant data, or invented APIs. Label uncertainty with validation=needs_review.
@@ -271,6 +294,7 @@ def parser() -> argparse.ArgumentParser:
 
 
 def main() -> int:
+    load_dotenv()
     args = parser().parse_args()
     try:
         return args.func(args)
@@ -281,4 +305,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
