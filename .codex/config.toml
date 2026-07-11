@@ -1,0 +1,3 @@
+# Project-scoped connection to the public Emergence.ai CRAFT documentation MCP.
+[mcp_servers.emergence-craft]
+url = "https://docs.emergence.ai/mcp"

@@ -1,0 +1,7 @@
+domain: data_catalog
+status: draft
+purpose: Record which cataloged data assets and metadata support an outcome.
+primary_assets: [data_connection, dataset, schema, column, artifact]
+open_questions:
+  - Confirm exact CRAFT asset types and identifiers through the MCP documentation.
+  - Define handling for classifications and sensitive-data redaction.

@@ -1,0 +1,7 @@
+domain: workflow
+status: draft
+purpose: Record workflow runs, ordered steps, retries, states, and outputs.
+primary_assets: [workflow, run, step, attempt, artifact]
+open_questions:
+  - Confirm public workflow APIs and Prefect identifier mapping through the MCP documentation.
+  - Define cancellation and retry trace semantics.

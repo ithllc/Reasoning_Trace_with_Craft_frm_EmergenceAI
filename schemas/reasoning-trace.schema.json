@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/reasoning-trace.schema.json",
+  "title": "Auditable Reasoning Trace",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["trace_id", "domain", "started_at", "actor", "trigger", "decision_summary", "validation"],
+  "properties": {
+    "trace_id": { "type": "string", "minLength": 1 },
+    "parent_trace_id": { "type": ["string", "null"] },
+    "domain": {
+      "enum": ["data_catalog", "workflow", "agent_registry", "service_registry"]
+    },
+    "started_at": { "type": "string", "format": "date-time" },
+    "ended_at": { "type": ["string", "null"], "format": "date-time" },
+    "actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "kind"],
+      "properties": {
+        "name": { "type": "string" },
+        "kind": { "enum": ["user", "agent", "workflow", "service"] },
+        "version": { "type": ["string", "null"] }
+      }
+    },
+    "trigger": {
+      "type": "object",
+      "required": ["type", "summary"],
+      "properties": {
+        "type": { "enum": ["user_request", "event", "schedule", "api_call"] },
+        "summary": { "type": "string" }
+      }
+    },
+    "asset_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["kind", "id"],
+        "properties": {
+          "kind": { "type": "string" },
+          "id": { "type": "string" },
+          "version": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source", "reference", "summary"],
+        "properties": {
+          "source": { "type": "string" },
+          "reference": { "type": "string" },
+          "summary": { "type": "string" }
+        }
+      }
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "status"],
+        "properties": {
+          "name": { "type": "string" },
+          "target": { "type": ["string", "null"] },
+          "status": { "enum": ["planned", "succeeded", "failed", "skipped"] },
+          "result_ref": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "policy_checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["policy", "outcome"],
+        "properties": {
+          "policy": { "type": "string" },
+          "outcome": { "enum": ["allow", "deny", "needs_review"] },
+          "explanation": { "type": "string" }
+        }
+      }
+    },
+    "decision_summary": { "type": "string", "minLength": 1 },
+    "output_refs": { "type": "array", "items": { "type": "string" } },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": { "enum": ["passed", "failed", "needs_review"] },
+        "checks": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}

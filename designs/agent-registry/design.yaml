@@ -1,0 +1,7 @@
+domain: agent_registry
+status: draft
+purpose: Record which registered agent version, skill, and protocol handled a request.
+primary_assets: [agent, agent_card, skill, endpoint]
+open_questions:
+  - Confirm A2A v0.3 and v1.0 fields supported by the target CRAFT tenant.
+  - Define agent-version immutability and retirement behavior.

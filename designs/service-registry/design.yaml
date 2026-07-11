@@ -1,0 +1,7 @@
+domain: service_registry
+status: proposed
+purpose: Record which deployed service version and endpoint fulfilled an action.
+primary_assets: [service, deployment, endpoint, environment, health_check]
+open_questions:
+  - Determine whether the target CRAFT tenant provides a service registry API.
+  - Map Kubernetes and Helm identities without inventing a CRAFT-native catalog.
