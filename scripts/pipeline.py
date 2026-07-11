@@ -173,6 +173,28 @@ def command_preflight(args: argparse.Namespace) -> int:
     return 0 if report["safe_to_submit"] else 2
 
 
+def command_nebius_capabilities(_: argparse.Namespace) -> int:
+    models = api_request("GET", "models?verbose=true").get("data", [])
+    model_ids = sorted(item["id"] for item in models if isinstance(item.get("id"), str))
+    fine_tuning_accessible = False
+    fine_tuning_error = None
+    job_count_returned = 0
+    try:
+        jobs = api_request("GET", "fine_tuning/jobs?limit=1")
+        fine_tuning_accessible = True
+        job_count_returned = len(jobs.get("data", []))
+    except RuntimeError as error:
+        fine_tuning_error = str(error)
+    print(json.dumps({
+        "model_count": len(model_ids),
+        "models": model_ids,
+        "fine_tuning_jobs_api_accessible": fine_tuning_accessible,
+        "fine_tuning_jobs_returned": job_count_returned,
+        "fine_tuning_error": fine_tuning_error,
+    }, indent=2))
+    return 0 if fine_tuning_accessible else 2
+
+
 def command_generate(args: argparse.Namespace) -> int:
     config = load_json(args.config)
     seeds = read_jsonl(args.seeds)
@@ -317,6 +339,7 @@ def parser() -> argparse.ArgumentParser:
     commands = result.add_subparsers(dest="command", required=True)
     commands.add_parser("inventory").set_defaults(func=command_inventory)
     commands.add_parser("preflight-nebius").set_defaults(func=command_preflight)
+    commands.add_parser("nebius-capabilities").set_defaults(func=command_nebius_capabilities)
     generate = commands.add_parser("generate")
     generate.add_argument("--seeds", type=Path, default=ROOT / "data" / "seeds" / "example-prompts.jsonl")
     generate.add_argument("--output", type=Path, default=ROOT / "data" / "generated" / "teacher.jsonl")
