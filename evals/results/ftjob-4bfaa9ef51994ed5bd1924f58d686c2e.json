@@ -1,0 +1,25 @@
+{
+  "job_id": "ftjob-4bfaa9ef51994ed5bd1924f58d686c2e",
+  "label": "Digital Analytics — 200 examples",
+  "session_order": 3,
+  "status": "succeeded",
+  "model": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+  "method": "LoRA",
+  "dataset_dir": "artifacts/digital-analytics-200-dataset",
+  "dataset_manifest_sha256": "0e01bf5f2861fea1485cfa6def6afe2c07f038acfeebfc50b69bea26afe2acb3",
+  "train_examples": 100,
+  "validation_examples": 100,
+  "trained_steps": 3,
+  "total_steps": 3,
+  "trained_tokens": 76875,
+  "duration_seconds": 509,
+  "time_limit_seconds": 600,
+  "context_length": 8192,
+  "checkpoint_metrics": [
+    {"step": 1, "train_loss": 6.064245223999023, "validation_loss": 6.147713661193848},
+    {"step": 2, "train_loss": 6.0597825050354, "validation_loss": 6.0242719650268555},
+    {"step": 3, "train_loss": 6.054384708404541, "validation_loss": 5.985922336578369}
+  ],
+  "evaluations": {"base_vs_lora": "pending_adapter_deployment", "promotion_decision": "not_promoted"},
+  "limitation": "The 100/100 split contains deterministic variations of ten reviewed templates; validation loss is not an independent generalization benchmark."
+}

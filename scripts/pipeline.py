@@ -83,6 +83,52 @@ def sha256(path: Path) -> str:
 
 def compact_catalog(snapshot: dict[str, Any]) -> dict[str, Any]:
     """Keep grounding fields while removing repetitive CRAFT transport metadata."""
+    if "selected_category_catalogs" in snapshot:
+        compact = {"category": snapshot.get("category_search", {}).get("term"), "catalogs": []}
+        for catalog_entry in snapshot["selected_category_catalogs"]:
+            compact_catalog_entry = {
+                "connection": catalog_entry["connection"]["slug"],
+                "database": catalog_entry["database"]["fully_qualified_name"],
+                "description": catalog_entry["database"].get("description"),
+                "schemas": [],
+            }
+            for schema_entry in catalog_entry.get("schemas", []):
+                schema_metadata = schema_entry["schema"].get("metadata", {})
+                compact_schema = {
+                    "fully_qualified_name": schema_metadata.get("fully_qualified_name"),
+                    "description": schema_metadata.get("description"),
+                    "tables": [],
+                }
+                partition_families: set[str] = set()
+                for table_entry in schema_entry.get("tables", []):
+                    table = table_entry.get("metadata", {})
+                    if not table.get("fully_qualified_name"):
+                        continue
+                    table_name = table["fully_qualified_name"].rsplit(".", 1)[-1]
+                    family = next((prefix for prefix in ("EVENTS_", "AUG_") if table_name.startswith(prefix)), table_name)
+                    if family in partition_families:
+                        continue
+                    partition_families.add(family)
+                    compact_schema["tables"].append({
+                        "fully_qualified_name": table["fully_qualified_name"],
+                        "description": table.get("description"),
+                        "classifications": {
+                            "pii": table.get("is_pii_tagged"),
+                            "sensitive": table.get("is_sensitivity_tagged"),
+                            "data_quality": table.get("is_dq_tagged"),
+                        },
+                        "columns": [{
+                            "name": column.get("name"),
+                            "fully_qualified_name": column.get("fully_qualified_name"),
+                            "data_type": column.get("data_type"),
+                            "description": column.get("description"),
+                            "pii": column.get("is_pii_tagged"),
+                            "sensitive": column.get("is_sensitivity_tagged"),
+                        } for column in table.get("children", [])],
+                    })
+                compact_catalog_entry["schemas"].append(compact_schema)
+            compact["catalogs"].append(compact_catalog_entry)
+        return compact
     compact: dict[str, Any] = {
         "connection": snapshot["selected_connection"],
         "database": "GITHUB_REPOS",
@@ -126,12 +172,13 @@ def compact_catalog(snapshot: dict[str, Any]) -> dict[str, Any]:
     return compact
 
 
-def api_request(method: str, path: str, *, body: bytes | None = None, content_type: str | None = None) -> Any:
+def api_request(method: str, path: str, *, body: bytes | None = None, content_type: str | None = None,
+                base_url: str | None = None) -> Any:
     token = os.environ.get("NEBIUS_API_KEY")
     if not token:
         raise RuntimeError("NEBIUS_API_KEY is required")
-    base_url = os.environ.get("NEBIUS_BASE_URL", "https://api.tokenfactory.nebius.com/v1/")
-    url = base_url.rstrip("/") + "/" + path.lstrip("/")
+    request_base = base_url or os.environ.get("NEBIUS_BASE_URL", "https://api.tokenfactory.nebius.com/v1/")
+    url = request_base.rstrip("/") + "/" + path.lstrip("/")
     project_id = os.environ.get("NEBIUS_PROJECT_ID")
     if project_id:
         separator = "&" if "?" in url else "?"
@@ -189,6 +236,11 @@ def command_nebius_capabilities(_: argparse.Namespace) -> int:
     print(json.dumps({
         "model_count": len(model_ids),
         "models": model_ids,
+        "candidate_voice_qa_models": [model for model in models if model.get("id") in {
+            "Qwen/Qwen3-30B-A3B-Instruct-2507",
+            "Qwen/Qwen3-32B",
+            "Qwen/Qwen3.5-397B-A17B",
+        }],
         "fine_tuning_jobs_api_accessible": fine_tuning_accessible,
         "fine_tuning_jobs_returned": job_count_returned,
         "fine_tuning_error": fine_tuning_error,
@@ -222,32 +274,42 @@ def command_generate(args: argparse.Namespace) -> int:
     seeds = read_jsonl(args.seeds)
     catalog = compact_catalog(load_json(args.catalog))
     output = args.output
-    prompt = f"""You are Sol, the Codex teacher for an auditable model-distillation dataset.
-Use the supplied read-only CRAFT GitHub catalog snapshot as project-scoped data evidence. Use emergence-craft for public workflow and agent-registry documentation when needed. Do not call live CRAFT tools in this headless run.
+    prompt_template = """You are Sol, the Codex teacher for an auditable model-distillation dataset.
+Use the supplied read-only CRAFT catalog snapshot as project-scoped data evidence. Use emergence-craft for public workflow and agent-registry documentation when needed. Do not call live CRAFT tools in this headless run.
 Create one high-quality example for every seed below. Return only JSON matching the supplied output schema.
 Use concise decision summaries, evidence references, and tool-call summaries. Do not expose or request hidden chain-of-thought.
 Never include credentials, private tenant data, or invented APIs. Label uncertainty with validation=needs_review.
-Teacher label: {config['teacher']['requested_label']}
-Seeds: {json.dumps(seeds, ensure_ascii=False)}
-CRAFT GitHub catalog snapshot: {json.dumps(catalog, ensure_ascii=False)}
+Teacher label: {teacher_label}
+Seeds: {seeds}
+CRAFT catalog snapshot: {catalog}
 """
-    raw = output.with_suffix(".teacher.json")
-    cmd = [
-        "codex", "exec", "--ephemeral", "--sandbox", "read-only",
-        "--output-schema", str(ROOT / "schemas" / "teacher-batch.schema.json"),
-        "--output-last-message", str(raw), "-",
-    ]
-    model = os.environ.get(config["teacher"]["model_env"])
-    if model:
-        cmd[2:2] = ["--model", model]
-    subprocess.run(cmd, cwd=ROOT, input=prompt, text=True, check=True)
-    batch = load_json(raw)
-    rows = []
-    for example in batch["examples"]:
-        rows.append({"messages": example["messages"], "metadata": {
-            "id": example["id"], "domain": example["domain"], "teacher": batch["teacher"],
-            "trace": example["trace"],
-        }})
+    rows, teacher = [], None
+    batch_size = max(1, args.batch_size)
+    for offset in range(0, len(seeds), batch_size):
+        seed_batch = seeds[offset:offset + batch_size]
+        raw = output.with_name(f"{output.stem}.teacher-{offset // batch_size + 1:03d}.json")
+        prompt = prompt_template.format(
+            teacher_label=config["teacher"]["requested_label"],
+            seeds=json.dumps(seed_batch, ensure_ascii=False),
+            catalog=json.dumps(catalog, ensure_ascii=False),
+        )
+        cmd = [
+            "codex", "exec", "--ephemeral", "--sandbox", "read-only",
+            "--output-schema", str(ROOT / "schemas" / "teacher-batch.schema.json"),
+            "--output-last-message", str(raw), "-",
+        ]
+        model = os.environ.get(config["teacher"]["model_env"])
+        if model:
+            cmd[2:2] = ["--model", model]
+        subprocess.run(cmd, cwd=ROOT, input=prompt, text=True, check=True)
+        batch = load_json(raw)
+        teacher = teacher or batch["teacher"]
+        for example in batch["examples"]:
+            rows.append({"messages": example["messages"], "metadata": {
+                "id": example["id"], "domain": example["domain"], "teacher": batch["teacher"],
+                "trace": example["trace"],
+            }})
+        print(f"Generated {len(rows)}/{len(seeds)} examples", flush=True)
     write_jsonl(output, rows)
     print(f"Wrote {len(rows)} examples to {output}")
     return 0
@@ -341,7 +403,7 @@ def command_monitor(args: argparse.Namespace) -> int:
         if time.monotonic() - started >= args.max_seconds:
             cancelled = api_request("POST", f"fine_tuning/jobs/{args.job_id}/cancel")
             dump_json(ROOT / "runs" / args.job_id / "cancelled-at-time-limit.json", cancelled)
-            print(json.dumps({"status": cancelled.get("status"), "reason": "15-minute wall-clock limit"}), flush=True)
+            print(json.dumps({"status": cancelled.get("status"), "reason": f"{args.max_seconds}-second wall-clock limit"}), flush=True)
             return 2
         time.sleep(args.interval)
 
@@ -358,6 +420,22 @@ def command_list_jobs(_: argparse.Namespace) -> int:
 
 def command_checkpoints(args: argparse.Namespace) -> int:
     result = api_request("GET", f"fine_tuning/jobs/{args.job_id}/checkpoints")
+    print(json.dumps(result, indent=2))
+    return 0
+
+
+def command_deploy(args: argparse.Namespace) -> int:
+    request = {
+        "source": f"{args.job_id}:{args.checkpoint_id}",
+        "base_model": load_json(args.config)["student"]["model"],
+        "name": args.name,
+        "description": "CRAFT Digital Analytics LoRA checkpoint for base-versus-adapter evaluation",
+    }
+    result = api_request(
+        "POST", "models", body=json.dumps(request).encode(), content_type="application/json",
+        base_url="https://api.tokenfactory.nebius.com/v0/",
+    )
+    dump_json(ROOT / "runs" / args.job_id / "deployment.json", {"request": request, "response": result})
     print(json.dumps(result, indent=2))
     return 0
 
@@ -391,6 +469,7 @@ def parser() -> argparse.ArgumentParser:
     generate.add_argument("--seeds", type=Path, default=ROOT / "data" / "seeds" / "example-prompts.jsonl")
     generate.add_argument("--output", type=Path, default=ROOT / "data" / "generated" / "teacher.jsonl")
     generate.add_argument("--catalog", type=Path, default=ROOT / "data" / "generated" / "github-catalog-snapshot.json")
+    generate.add_argument("--batch-size", type=int, default=10)
     generate.set_defaults(func=command_generate)
     prepare = commands.add_parser("prepare")
     prepare.add_argument("--input", type=Path, required=True)
@@ -408,6 +487,11 @@ def parser() -> argparse.ArgumentParser:
     checkpoints = commands.add_parser("checkpoints")
     checkpoints.add_argument("job_id")
     checkpoints.set_defaults(func=command_checkpoints)
+    deploy = commands.add_parser("deploy")
+    deploy.add_argument("job_id")
+    deploy.add_argument("checkpoint_id")
+    deploy.add_argument("--name", default="craft-digital-analytics-lora")
+    deploy.set_defaults(func=command_deploy)
     evaluate = commands.add_parser("eval")
     evaluate.add_argument("--model", required=True)
     evaluate.add_argument("--output", type=Path, default=ROOT / "artifacts" / "evals")

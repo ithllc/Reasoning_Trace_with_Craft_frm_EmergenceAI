@@ -1,0 +1,8 @@
+{"id":"digital-catalog-001","domain":"data_catalog","prompt":"Select the appropriate CRAFT catalog for analyzing mobile-app interaction events and explain the evidence and safeguards required before use."}
+{"id":"digital-catalog-002","domain":"data_catalog","prompt":"Select the appropriate CRAFT catalog for analyzing e-commerce sessions, engagement, purchases, and conversions, citing catalog metadata."}
+{"id":"digital-catalog-003","domain":"data_catalog","prompt":"Compare the Firebase and GA4 catalogs for a cross-channel Digital Analytics request and state when the request must be split rather than joined."}
+{"id":"digital-workflow-001","domain":"workflow","prompt":"Design an auditable workflow trace that computes daily engagement metrics from a dated event table without exposing user-level rows."}
+{"id":"digital-workflow-002","domain":"workflow","prompt":"Design a bounded workflow for comparing engaged sessions with purchase activity while preserving provenance and validating date alignment."}
+{"id":"digital-policy-001","domain":"data_catalog","prompt":"Assess whether pseudonymous user identifiers and device information may be copied into a reasoning trace, using the catalog classifications and data-minimization policy."}
+{"id":"digital-agent-001","domain":"agent_registry","prompt":"Specify the evidence an analytics agent card must provide before it can analyze Firebase or GA4 event catalogs."}
+{"id":"digital-validation-001","domain":"workflow","prompt":"Define validation gates for a Digital Analytics artifact derived from partitioned Firebase and GA4 event tables."}

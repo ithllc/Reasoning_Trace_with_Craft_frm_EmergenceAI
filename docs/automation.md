@@ -41,6 +41,36 @@ The configuration selects LoRA (`lora: true`, rank 16, alpha 16, dropout 0.05) w
 
 The live tool endpoint is `https://nebius.emergence.ai/mcp`. Every request is scoped with `X-Project-ID: 8c5c41d7-19e0-45ba-8bf6-57fc2706bf1b`. Codex authenticates through PKCE using public client `em-runtime-mcp`; no OAuth client secret is used. Run `codex mcp login craft` once, then verify catalog access with the CRAFT `list_databases` tool.
 
+## Digital Analytics catalog expansion
+
+The follow-up run queried all nine live project connections and their database metadata. An exact `Digital Analytics` metadata search returned zero tagged matches, so the inclusion decision uses the purpose stated in each live database description:
+
+| Included catalog | Why it is in scope |
+| --- | --- |
+| `firebase-8c5c41d7.FIREBASE` | Mobile-app interaction events, user behavior, device context, and app-performance analysis |
+| `ga4-8c5c41d7.GA4` | E-commerce events, sessions, engagement, purchases, and conversion analysis |
+
+Brazilian E-commerce, Crypto, DEPS_DEV_V1, GitHub Repositories, IDC, PanCancer Atlas, and TheLook E-commerce are excluded from this run because their live descriptions do not define them as digital interaction analytics catalogs. The evidence snapshot is `data/generated/digital-analytics-catalogs.json`; it contains catalog/schema metadata only and no sampled source rows.
+
+Generate and prepare this batch with:
+
+```bash
+python3 scripts/craft_mcp.py digital-analytics --output data/generated/digital-analytics-catalogs.json
+python3 scripts/pipeline.py generate --seeds data/seeds/digital-analytics-prompts.jsonl --catalog data/generated/digital-analytics-catalogs.json --output data/generated/digital-analytics-teacher.jsonl
+python3 scripts/pipeline.py prepare --input data/generated/digital-analytics-teacher.jsonl --output-dir artifacts/digital-analytics-dataset
+```
+
+The expanded demo dataset is rebuilt deterministically and split exactly in half:
+
+```bash
+python3 scripts/build_digital_analytics_seeds.py
+python3 scripts/pipeline.py prepare --input data/generated/digital-analytics-200-teacher.jsonl --output-dir artifacts/digital-analytics-200-dataset
+python3 scripts/pipeline.py submit --dataset-dir artifacts/digital-analytics-200-dataset
+python3 scripts/pipeline.py monitor <job-id> --max-seconds 600
+```
+
+The latest run used 100 training and 100 validation examples, context length 8,192, LoRA rank/alpha 16, and a strict ten-minute wall-clock guard. It succeeded in 509 seconds and processed 76,875 tokens. Its three checkpoint train losses were 6.0642, 6.0598, and 6.0544; validation losses were 6.1477, 6.0243, and 5.9859. These losses are training diagnostics, not base-versus-LoRA benchmark results.
+
 ## Qwythos evaluation reproduction
 
 The Qwythos model card reports `lm-evaluation-harness` with the Hugging Face backend, chat template enabled, a 100-example limit, and Qwen sampling (`temperature=0.6`, `top_p=0.95`, `top_k=20`). Its published table covers:

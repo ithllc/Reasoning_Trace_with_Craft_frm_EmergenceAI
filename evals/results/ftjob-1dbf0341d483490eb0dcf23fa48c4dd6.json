@@ -1,0 +1,24 @@
+{
+  "job_id": "ftjob-1dbf0341d483490eb0dcf23fa48c4dd6",
+  "label": "Digital Analytics — 8 examples",
+  "session_order": 2,
+  "status": "succeeded",
+  "model": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+  "method": "LoRA",
+  "dataset_dir": "artifacts/digital-analytics-dataset",
+  "dataset_manifest_sha256": "fcce4763ccba3e53808be774cbde4e0fe26600467229b983bfbd066b849a8d6d",
+  "train_examples": 7,
+  "validation_examples": 1,
+  "trained_steps": 3,
+  "total_steps": 3,
+  "trained_tokens": 5058,
+  "duration_seconds": 492,
+  "time_limit_seconds": 1800,
+  "context_length": 8192,
+  "checkpoint_metrics": [
+    {"step": 1, "train_loss": 4.512617111206055, "validation_loss": 4.244843482971191},
+    {"step": 2, "train_loss": 4.50949239730835, "validation_loss": 4.192107677459717},
+    {"step": 3, "train_loss": 4.505130290985107, "validation_loss": 4.183881759643555}
+  ],
+  "evaluations": {"base_vs_lora": "pending_adapter_deployment", "promotion_decision": "not_promoted"}
+}

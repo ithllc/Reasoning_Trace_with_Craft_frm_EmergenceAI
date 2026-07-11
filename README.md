@@ -91,9 +91,13 @@ python3 scripts/pipeline.py eval --model Qwen/Qwen3-30B-A3B-Instruct-2507
 
 Nebius model eligibility now passes. Dataset quality remains the submission gate: the initial three-example batch is marked `needs_review` and will not be used for a paid LoRA job until reviewed examples and held-out evaluations are ready.
 
-Fine-tuning demo runs have a strict 15-minute wall-clock monitor limit. `python3 scripts/pipeline.py monitor <job-id>` polls no faster than every 15 seconds and calls the Nebius cancellation endpoint if the job is still active at 900 seconds.
+The first fine-tuning demo used a strict 15-minute wall-clock limit. The Digital Analytics follow-up uses `python3 scripts/pipeline.py monitor <job-id> --max-seconds 1800`, which polls no faster than every 15 seconds and cancels a job that remains active after 30 minutes.
 
 The verified CRAFT GitHub snapshot currently contains one schema, six tables, and 30 columns. The first Sol batch contains catalog, workflow, and agent-registry examples. Examples without live CRAFT evidence are labeled `needs_review` and are not approved for training automatically. The hackathon MCP currently exposes catalog/schema, SQL generation and execution, result retrieval, terminology, chart, and sampling tools; it does not expose workflow or agent-registry tools.
+
+The second run inventories all nine project data connections and uses the two catalogs whose descriptions directly match Digital Analytics: `firebase-8c5c41d7.FIREBASE` for mobile-app interaction events and app-performance analysis, and `ga4-8c5c41d7.GA4` for e-commerce events, sessions, engagement, purchases, and conversions. The exact phrase search returned no tag-level matches, so selection is based on the catalogs' live database descriptions. The remaining seven catalogs are excluded because their stated purposes are commerce operations, blockchain, software dependencies, repositories, or medical research rather than digital interaction analytics.
+
+The current reproducible dataset contains 200 deterministic, catalog-grounded trace variations across ten policy/workflow templates and twenty scenarios. It is split exactly 100/100 between training and validation in `artifacts/digital-analytics-200-dataset/`. This large validation share checks template consistency; because both halves share templates, it must not be presented as an independent generalization benchmark.
 
 ## Team dataset review
 
@@ -117,9 +121,19 @@ Run the local-only dashboard:
 python3 ui/server.py
 ```
 
-Open `http://127.0.0.1:8765`. The UI shows teacher/student configuration, review status, dataset metadata, live Nebius jobs, LoRA settings, and LLM evaluations. It can approve/reset examples and cancel active jobs. It binds only to localhost and never returns API keys or OAuth tokens.
+Open `http://127.0.0.1:8765`. The UI shows the current 200-example dataset, live Nebius jobs, LoRA settings, immutable training-session history, per-session loss charts, cross-session final-loss comparison, and LLM evaluations. Completed dataset records are read-only in the UI, preventing approval-button experiments from changing historical training inputs. It binds only to localhost and never returns API keys or OAuth tokens.
+
+For dashboard-grounded voice Q&A, start a second subprocess:
+
+```bash
+python3 ui/voice_server.py
+```
+
+The dashboard uses the browser Web Speech API for speech-to-text and text-to-speech when supported; typed questions remain available everywhere. The subprocess retrieves fresh `/api/dashboard` data and sends it to the configured Nebius inference model with the question. Live inference was verified with `Qwen/Qwen3-30B-A3B-Instruct-2507` at `$0.10` per million input tokens and `$0.30` per million output tokens. Missing prices disable inference, the ledger is stored at `runs/voice-budget.json`, and the voice ceiling is `$50`; the remaining `$25` of the user's `$75` project budget is reserved for fine-tuning and evaluation. The voice service enforces its allocation locally, while the 30-minute training watchdog limits training duration because the available Nebius API does not expose an account-wide dollar stop.
 
 The first bounded LoRA pipeline-validation job, `ftjob-a16a0aa96695477593c126598b12f88b`, completed successfully in 3 steps and 1,437 trained tokens. It is not promoted until checkpoint evaluations pass; see `evals/results/`.
+
+Three sessions are recorded: the initial 3-example validation run, an 8-example Digital Analytics run, and the current 200-example run. The latest job `ftjob-4bfaa9ef51994ed5bd1924f58d686c2e` trained on 100 examples, validated on 100, processed 76,875 tokens, and succeeded in 509 seconds under its 600-second limit.
 
 ## Useful commands
 

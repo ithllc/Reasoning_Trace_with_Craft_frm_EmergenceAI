@@ -1,0 +1,10 @@
+{
+  "status": "approved_for_demo_training",
+  "reviewed_examples": 200,
+  "train_examples": 100,
+  "validation_examples": 100,
+  "evidence_reference_check": "passed",
+  "secret_scan": "passed",
+  "source_sha256": "0e01bf5f2861fea1485cfa6def6afe2c07f038acfeebfc50b69bea26afe2acb3",
+  "limitations": "Examples are deterministic variations of ten reviewed policy templates. The 50% validation split measures template consistency and is not an independent generalization benchmark."
+}

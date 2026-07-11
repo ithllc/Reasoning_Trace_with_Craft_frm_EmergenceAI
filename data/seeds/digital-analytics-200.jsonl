@@ -1,0 +1,200 @@
+{"id":"digital-catalog-001","domain":"data_catalog","prompt":"Choose between Firebase and GA4 for a daily engagement trend; cite exact catalog evidence, identify missing evidence, and state whether use is approved."}
+{"id":"digital-catalog-002","domain":"data_catalog","prompt":"Choose between Firebase and GA4 for a weekly active-use summary; cite exact catalog evidence, identify missing evidence, and state whether use is approved."}
+{"id":"digital-catalog-003","domain":"data_catalog","prompt":"Choose between Firebase and GA4 for a purchase conversion funnel; cite exact catalog evidence, identify missing evidence, and state whether use is approved."}
+{"id":"digital-catalog-004","domain":"data_catalog","prompt":"Choose between Firebase and GA4 for a platform comparison; cite exact catalog evidence, identify missing evidence, and state whether use is approved."}
+{"id":"digital-catalog-005","domain":"data_catalog","prompt":"Choose between Firebase and GA4 for a app-version adoption; cite exact catalog evidence, identify missing evidence, and state whether use is approved."}
+{"id":"digital-catalog-006","domain":"data_catalog","prompt":"Choose between Firebase and GA4 for a event-volume anomaly; cite exact catalog evidence, identify missing evidence, and state whether use is approved."}
+{"id":"digital-catalog-007","domain":"data_catalog","prompt":"Choose between Firebase and GA4 for a campaign attribution; cite exact catalog evidence, identify missing evidence, and state whether use is approved."}
+{"id":"digital-catalog-008","domain":"data_catalog","prompt":"Choose between Firebase and GA4 for a session quality; cite exact catalog evidence, identify missing evidence, and state whether use is approved."}
+{"id":"digital-catalog-009","domain":"data_catalog","prompt":"Choose between Firebase and GA4 for a checkout abandonment; cite exact catalog evidence, identify missing evidence, and state whether use is approved."}
+{"id":"digital-catalog-010","domain":"data_catalog","prompt":"Choose between Firebase and GA4 for a retention cohort; cite exact catalog evidence, identify missing evidence, and state whether use is approved."}
+{"id":"digital-catalog-011","domain":"data_catalog","prompt":"Choose between Firebase and GA4 for a geographic rollup; cite exact catalog evidence, identify missing evidence, and state whether use is approved."}
+{"id":"digital-catalog-012","domain":"data_catalog","prompt":"Choose between Firebase and GA4 for a device-category performance; cite exact catalog evidence, identify missing evidence, and state whether use is approved."}
+{"id":"digital-catalog-013","domain":"data_catalog","prompt":"Choose between Firebase and GA4 for a event taxonomy audit; cite exact catalog evidence, identify missing evidence, and state whether use is approved."}
+{"id":"digital-catalog-014","domain":"data_catalog","prompt":"Choose between Firebase and GA4 for a partition completeness; cite exact catalog evidence, identify missing evidence, and state whether use is approved."}
+{"id":"digital-catalog-015","domain":"data_catalog","prompt":"Choose between Firebase and GA4 for a timestamp consistency; cite exact catalog evidence, identify missing evidence, and state whether use is approved."}
+{"id":"digital-catalog-016","domain":"data_catalog","prompt":"Choose between Firebase and GA4 for a metric-definition change; cite exact catalog evidence, identify missing evidence, and state whether use is approved."}
+{"id":"digital-catalog-017","domain":"data_catalog","prompt":"Choose between Firebase and GA4 for a small-cell privacy review; cite exact catalog evidence, identify missing evidence, and state whether use is approved."}
+{"id":"digital-catalog-018","domain":"data_catalog","prompt":"Choose between Firebase and GA4 for a cross-channel comparison; cite exact catalog evidence, identify missing evidence, and state whether use is approved."}
+{"id":"digital-catalog-019","domain":"data_catalog","prompt":"Choose between Firebase and GA4 for a late-arriving event handling; cite exact catalog evidence, identify missing evidence, and state whether use is approved."}
+{"id":"digital-catalog-020","domain":"data_catalog","prompt":"Choose between Firebase and GA4 for a dashboard release approval; cite exact catalog evidence, identify missing evidence, and state whether use is approved."}
+{"id":"digital-scope-001","domain":"data_catalog","prompt":"Define the minimum table and column scope for a daily engagement trend without exposing user-level rows."}
+{"id":"digital-scope-002","domain":"data_catalog","prompt":"Define the minimum table and column scope for a weekly active-use summary without exposing user-level rows."}
+{"id":"digital-scope-003","domain":"data_catalog","prompt":"Define the minimum table and column scope for a purchase conversion funnel without exposing user-level rows."}
+{"id":"digital-scope-004","domain":"data_catalog","prompt":"Define the minimum table and column scope for a platform comparison without exposing user-level rows."}
+{"id":"digital-scope-005","domain":"data_catalog","prompt":"Define the minimum table and column scope for a app-version adoption without exposing user-level rows."}
+{"id":"digital-scope-006","domain":"data_catalog","prompt":"Define the minimum table and column scope for a event-volume anomaly without exposing user-level rows."}
+{"id":"digital-scope-007","domain":"data_catalog","prompt":"Define the minimum table and column scope for a campaign attribution without exposing user-level rows."}
+{"id":"digital-scope-008","domain":"data_catalog","prompt":"Define the minimum table and column scope for a session quality without exposing user-level rows."}
+{"id":"digital-scope-009","domain":"data_catalog","prompt":"Define the minimum table and column scope for a checkout abandonment without exposing user-level rows."}
+{"id":"digital-scope-010","domain":"data_catalog","prompt":"Define the minimum table and column scope for a retention cohort without exposing user-level rows."}
+{"id":"digital-scope-011","domain":"data_catalog","prompt":"Define the minimum table and column scope for a geographic rollup without exposing user-level rows."}
+{"id":"digital-scope-012","domain":"data_catalog","prompt":"Define the minimum table and column scope for a device-category performance without exposing user-level rows."}
+{"id":"digital-scope-013","domain":"data_catalog","prompt":"Define the minimum table and column scope for a event taxonomy audit without exposing user-level rows."}
+{"id":"digital-scope-014","domain":"data_catalog","prompt":"Define the minimum table and column scope for a partition completeness without exposing user-level rows."}
+{"id":"digital-scope-015","domain":"data_catalog","prompt":"Define the minimum table and column scope for a timestamp consistency without exposing user-level rows."}
+{"id":"digital-scope-016","domain":"data_catalog","prompt":"Define the minimum table and column scope for a metric-definition change without exposing user-level rows."}
+{"id":"digital-scope-017","domain":"data_catalog","prompt":"Define the minimum table and column scope for a small-cell privacy review without exposing user-level rows."}
+{"id":"digital-scope-018","domain":"data_catalog","prompt":"Define the minimum table and column scope for a cross-channel comparison without exposing user-level rows."}
+{"id":"digital-scope-019","domain":"data_catalog","prompt":"Define the minimum table and column scope for a late-arriving event handling without exposing user-level rows."}
+{"id":"digital-scope-020","domain":"data_catalog","prompt":"Define the minimum table and column scope for a dashboard release approval without exposing user-level rows."}
+{"id":"digital-privacy-001","domain":"data_catalog","prompt":"Assess pseudonymous identifiers, device, geo, and VARIANT fields for a daily engagement trend; apply data minimization and classification caveats."}
+{"id":"digital-privacy-002","domain":"data_catalog","prompt":"Assess pseudonymous identifiers, device, geo, and VARIANT fields for a weekly active-use summary; apply data minimization and classification caveats."}
+{"id":"digital-privacy-003","domain":"data_catalog","prompt":"Assess pseudonymous identifiers, device, geo, and VARIANT fields for a purchase conversion funnel; apply data minimization and classification caveats."}
+{"id":"digital-privacy-004","domain":"data_catalog","prompt":"Assess pseudonymous identifiers, device, geo, and VARIANT fields for a platform comparison; apply data minimization and classification caveats."}
+{"id":"digital-privacy-005","domain":"data_catalog","prompt":"Assess pseudonymous identifiers, device, geo, and VARIANT fields for a app-version adoption; apply data minimization and classification caveats."}
+{"id":"digital-privacy-006","domain":"data_catalog","prompt":"Assess pseudonymous identifiers, device, geo, and VARIANT fields for a event-volume anomaly; apply data minimization and classification caveats."}
+{"id":"digital-privacy-007","domain":"data_catalog","prompt":"Assess pseudonymous identifiers, device, geo, and VARIANT fields for a campaign attribution; apply data minimization and classification caveats."}
+{"id":"digital-privacy-008","domain":"data_catalog","prompt":"Assess pseudonymous identifiers, device, geo, and VARIANT fields for a session quality; apply data minimization and classification caveats."}
+{"id":"digital-privacy-009","domain":"data_catalog","prompt":"Assess pseudonymous identifiers, device, geo, and VARIANT fields for a checkout abandonment; apply data minimization and classification caveats."}
+{"id":"digital-privacy-010","domain":"data_catalog","prompt":"Assess pseudonymous identifiers, device, geo, and VARIANT fields for a retention cohort; apply data minimization and classification caveats."}
+{"id":"digital-privacy-011","domain":"data_catalog","prompt":"Assess pseudonymous identifiers, device, geo, and VARIANT fields for a geographic rollup; apply data minimization and classification caveats."}
+{"id":"digital-privacy-012","domain":"data_catalog","prompt":"Assess pseudonymous identifiers, device, geo, and VARIANT fields for a device-category performance; apply data minimization and classification caveats."}
+{"id":"digital-privacy-013","domain":"data_catalog","prompt":"Assess pseudonymous identifiers, device, geo, and VARIANT fields for a event taxonomy audit; apply data minimization and classification caveats."}
+{"id":"digital-privacy-014","domain":"data_catalog","prompt":"Assess pseudonymous identifiers, device, geo, and VARIANT fields for a partition completeness; apply data minimization and classification caveats."}
+{"id":"digital-privacy-015","domain":"data_catalog","prompt":"Assess pseudonymous identifiers, device, geo, and VARIANT fields for a timestamp consistency; apply data minimization and classification caveats."}
+{"id":"digital-privacy-016","domain":"data_catalog","prompt":"Assess pseudonymous identifiers, device, geo, and VARIANT fields for a metric-definition change; apply data minimization and classification caveats."}
+{"id":"digital-privacy-017","domain":"data_catalog","prompt":"Assess pseudonymous identifiers, device, geo, and VARIANT fields for a small-cell privacy review; apply data minimization and classification caveats."}
+{"id":"digital-privacy-018","domain":"data_catalog","prompt":"Assess pseudonymous identifiers, device, geo, and VARIANT fields for a cross-channel comparison; apply data minimization and classification caveats."}
+{"id":"digital-privacy-019","domain":"data_catalog","prompt":"Assess pseudonymous identifiers, device, geo, and VARIANT fields for a late-arriving event handling; apply data minimization and classification caveats."}
+{"id":"digital-privacy-020","domain":"data_catalog","prompt":"Assess pseudonymous identifiers, device, geo, and VARIANT fields for a dashboard release approval; apply data minimization and classification caveats."}
+{"id":"digital-quality-001","domain":"data_catalog","prompt":"Evaluate freshness, partition coverage, and data-quality evidence required for a daily engagement trend."}
+{"id":"digital-quality-002","domain":"data_catalog","prompt":"Evaluate freshness, partition coverage, and data-quality evidence required for a weekly active-use summary."}
+{"id":"digital-quality-003","domain":"data_catalog","prompt":"Evaluate freshness, partition coverage, and data-quality evidence required for a purchase conversion funnel."}
+{"id":"digital-quality-004","domain":"data_catalog","prompt":"Evaluate freshness, partition coverage, and data-quality evidence required for a platform comparison."}
+{"id":"digital-quality-005","domain":"data_catalog","prompt":"Evaluate freshness, partition coverage, and data-quality evidence required for a app-version adoption."}
+{"id":"digital-quality-006","domain":"data_catalog","prompt":"Evaluate freshness, partition coverage, and data-quality evidence required for a event-volume anomaly."}
+{"id":"digital-quality-007","domain":"data_catalog","prompt":"Evaluate freshness, partition coverage, and data-quality evidence required for a campaign attribution."}
+{"id":"digital-quality-008","domain":"data_catalog","prompt":"Evaluate freshness, partition coverage, and data-quality evidence required for a session quality."}
+{"id":"digital-quality-009","domain":"data_catalog","prompt":"Evaluate freshness, partition coverage, and data-quality evidence required for a checkout abandonment."}
+{"id":"digital-quality-010","domain":"data_catalog","prompt":"Evaluate freshness, partition coverage, and data-quality evidence required for a retention cohort."}
+{"id":"digital-quality-011","domain":"data_catalog","prompt":"Evaluate freshness, partition coverage, and data-quality evidence required for a geographic rollup."}
+{"id":"digital-quality-012","domain":"data_catalog","prompt":"Evaluate freshness, partition coverage, and data-quality evidence required for a device-category performance."}
+{"id":"digital-quality-013","domain":"data_catalog","prompt":"Evaluate freshness, partition coverage, and data-quality evidence required for a event taxonomy audit."}
+{"id":"digital-quality-014","domain":"data_catalog","prompt":"Evaluate freshness, partition coverage, and data-quality evidence required for a partition completeness."}
+{"id":"digital-quality-015","domain":"data_catalog","prompt":"Evaluate freshness, partition coverage, and data-quality evidence required for a timestamp consistency."}
+{"id":"digital-quality-016","domain":"data_catalog","prompt":"Evaluate freshness, partition coverage, and data-quality evidence required for a metric-definition change."}
+{"id":"digital-quality-017","domain":"data_catalog","prompt":"Evaluate freshness, partition coverage, and data-quality evidence required for a small-cell privacy review."}
+{"id":"digital-quality-018","domain":"data_catalog","prompt":"Evaluate freshness, partition coverage, and data-quality evidence required for a cross-channel comparison."}
+{"id":"digital-quality-019","domain":"data_catalog","prompt":"Evaluate freshness, partition coverage, and data-quality evidence required for a late-arriving event handling."}
+{"id":"digital-quality-020","domain":"data_catalog","prompt":"Evaluate freshness, partition coverage, and data-quality evidence required for a dashboard release approval."}
+{"id":"digital-workflow-001","domain":"workflow","prompt":"Design an auditable read-only workflow trace for a daily engagement trend, including trigger, bounded actions, provenance, and output."}
+{"id":"digital-workflow-002","domain":"workflow","prompt":"Design an auditable read-only workflow trace for a weekly active-use summary, including trigger, bounded actions, provenance, and output."}
+{"id":"digital-workflow-003","domain":"workflow","prompt":"Design an auditable read-only workflow trace for a purchase conversion funnel, including trigger, bounded actions, provenance, and output."}
+{"id":"digital-workflow-004","domain":"workflow","prompt":"Design an auditable read-only workflow trace for a platform comparison, including trigger, bounded actions, provenance, and output."}
+{"id":"digital-workflow-005","domain":"workflow","prompt":"Design an auditable read-only workflow trace for a app-version adoption, including trigger, bounded actions, provenance, and output."}
+{"id":"digital-workflow-006","domain":"workflow","prompt":"Design an auditable read-only workflow trace for a event-volume anomaly, including trigger, bounded actions, provenance, and output."}
+{"id":"digital-workflow-007","domain":"workflow","prompt":"Design an auditable read-only workflow trace for a campaign attribution, including trigger, bounded actions, provenance, and output."}
+{"id":"digital-workflow-008","domain":"workflow","prompt":"Design an auditable read-only workflow trace for a session quality, including trigger, bounded actions, provenance, and output."}
+{"id":"digital-workflow-009","domain":"workflow","prompt":"Design an auditable read-only workflow trace for a checkout abandonment, including trigger, bounded actions, provenance, and output."}
+{"id":"digital-workflow-010","domain":"workflow","prompt":"Design an auditable read-only workflow trace for a retention cohort, including trigger, bounded actions, provenance, and output."}
+{"id":"digital-workflow-011","domain":"workflow","prompt":"Design an auditable read-only workflow trace for a geographic rollup, including trigger, bounded actions, provenance, and output."}
+{"id":"digital-workflow-012","domain":"workflow","prompt":"Design an auditable read-only workflow trace for a device-category performance, including trigger, bounded actions, provenance, and output."}
+{"id":"digital-workflow-013","domain":"workflow","prompt":"Design an auditable read-only workflow trace for a event taxonomy audit, including trigger, bounded actions, provenance, and output."}
+{"id":"digital-workflow-014","domain":"workflow","prompt":"Design an auditable read-only workflow trace for a partition completeness, including trigger, bounded actions, provenance, and output."}
+{"id":"digital-workflow-015","domain":"workflow","prompt":"Design an auditable read-only workflow trace for a timestamp consistency, including trigger, bounded actions, provenance, and output."}
+{"id":"digital-workflow-016","domain":"workflow","prompt":"Design an auditable read-only workflow trace for a metric-definition change, including trigger, bounded actions, provenance, and output."}
+{"id":"digital-workflow-017","domain":"workflow","prompt":"Design an auditable read-only workflow trace for a small-cell privacy review, including trigger, bounded actions, provenance, and output."}
+{"id":"digital-workflow-018","domain":"workflow","prompt":"Design an auditable read-only workflow trace for a cross-channel comparison, including trigger, bounded actions, provenance, and output."}
+{"id":"digital-workflow-019","domain":"workflow","prompt":"Design an auditable read-only workflow trace for a late-arriving event handling, including trigger, bounded actions, provenance, and output."}
+{"id":"digital-workflow-020","domain":"workflow","prompt":"Design an auditable read-only workflow trace for a dashboard release approval, including trigger, bounded actions, provenance, and output."}
+{"id":"digital-validation-001","domain":"workflow","prompt":"Define deterministic validation gates and failure behavior for a daily engagement trend artifact."}
+{"id":"digital-validation-002","domain":"workflow","prompt":"Define deterministic validation gates and failure behavior for a weekly active-use summary artifact."}
+{"id":"digital-validation-003","domain":"workflow","prompt":"Define deterministic validation gates and failure behavior for a purchase conversion funnel artifact."}
+{"id":"digital-validation-004","domain":"workflow","prompt":"Define deterministic validation gates and failure behavior for a platform comparison artifact."}
+{"id":"digital-validation-005","domain":"workflow","prompt":"Define deterministic validation gates and failure behavior for a app-version adoption artifact."}
+{"id":"digital-validation-006","domain":"workflow","prompt":"Define deterministic validation gates and failure behavior for a event-volume anomaly artifact."}
+{"id":"digital-validation-007","domain":"workflow","prompt":"Define deterministic validation gates and failure behavior for a campaign attribution artifact."}
+{"id":"digital-validation-008","domain":"workflow","prompt":"Define deterministic validation gates and failure behavior for a session quality artifact."}
+{"id":"digital-validation-009","domain":"workflow","prompt":"Define deterministic validation gates and failure behavior for a checkout abandonment artifact."}
+{"id":"digital-validation-010","domain":"workflow","prompt":"Define deterministic validation gates and failure behavior for a retention cohort artifact."}
+{"id":"digital-validation-011","domain":"workflow","prompt":"Define deterministic validation gates and failure behavior for a geographic rollup artifact."}
+{"id":"digital-validation-012","domain":"workflow","prompt":"Define deterministic validation gates and failure behavior for a device-category performance artifact."}
+{"id":"digital-validation-013","domain":"workflow","prompt":"Define deterministic validation gates and failure behavior for a event taxonomy audit artifact."}
+{"id":"digital-validation-014","domain":"workflow","prompt":"Define deterministic validation gates and failure behavior for a partition completeness artifact."}
+{"id":"digital-validation-015","domain":"workflow","prompt":"Define deterministic validation gates and failure behavior for a timestamp consistency artifact."}
+{"id":"digital-validation-016","domain":"workflow","prompt":"Define deterministic validation gates and failure behavior for a metric-definition change artifact."}
+{"id":"digital-validation-017","domain":"workflow","prompt":"Define deterministic validation gates and failure behavior for a small-cell privacy review artifact."}
+{"id":"digital-validation-018","domain":"workflow","prompt":"Define deterministic validation gates and failure behavior for a cross-channel comparison artifact."}
+{"id":"digital-validation-019","domain":"workflow","prompt":"Define deterministic validation gates and failure behavior for a late-arriving event handling artifact."}
+{"id":"digital-validation-020","domain":"workflow","prompt":"Define deterministic validation gates and failure behavior for a dashboard release approval artifact."}
+{"id":"digital-temporal-001","domain":"workflow","prompt":"Resolve date partitions, timezone, overlap, and duplicate risks for a daily engagement trend."}
+{"id":"digital-temporal-002","domain":"workflow","prompt":"Resolve date partitions, timezone, overlap, and duplicate risks for a weekly active-use summary."}
+{"id":"digital-temporal-003","domain":"workflow","prompt":"Resolve date partitions, timezone, overlap, and duplicate risks for a purchase conversion funnel."}
+{"id":"digital-temporal-004","domain":"workflow","prompt":"Resolve date partitions, timezone, overlap, and duplicate risks for a platform comparison."}
+{"id":"digital-temporal-005","domain":"workflow","prompt":"Resolve date partitions, timezone, overlap, and duplicate risks for a app-version adoption."}
+{"id":"digital-temporal-006","domain":"workflow","prompt":"Resolve date partitions, timezone, overlap, and duplicate risks for a event-volume anomaly."}
+{"id":"digital-temporal-007","domain":"workflow","prompt":"Resolve date partitions, timezone, overlap, and duplicate risks for a campaign attribution."}
+{"id":"digital-temporal-008","domain":"workflow","prompt":"Resolve date partitions, timezone, overlap, and duplicate risks for a session quality."}
+{"id":"digital-temporal-009","domain":"workflow","prompt":"Resolve date partitions, timezone, overlap, and duplicate risks for a checkout abandonment."}
+{"id":"digital-temporal-010","domain":"workflow","prompt":"Resolve date partitions, timezone, overlap, and duplicate risks for a retention cohort."}
+{"id":"digital-temporal-011","domain":"workflow","prompt":"Resolve date partitions, timezone, overlap, and duplicate risks for a geographic rollup."}
+{"id":"digital-temporal-012","domain":"workflow","prompt":"Resolve date partitions, timezone, overlap, and duplicate risks for a device-category performance."}
+{"id":"digital-temporal-013","domain":"workflow","prompt":"Resolve date partitions, timezone, overlap, and duplicate risks for a event taxonomy audit."}
+{"id":"digital-temporal-014","domain":"workflow","prompt":"Resolve date partitions, timezone, overlap, and duplicate risks for a partition completeness."}
+{"id":"digital-temporal-015","domain":"workflow","prompt":"Resolve date partitions, timezone, overlap, and duplicate risks for a timestamp consistency."}
+{"id":"digital-temporal-016","domain":"workflow","prompt":"Resolve date partitions, timezone, overlap, and duplicate risks for a metric-definition change."}
+{"id":"digital-temporal-017","domain":"workflow","prompt":"Resolve date partitions, timezone, overlap, and duplicate risks for a small-cell privacy review."}
+{"id":"digital-temporal-018","domain":"workflow","prompt":"Resolve date partitions, timezone, overlap, and duplicate risks for a cross-channel comparison."}
+{"id":"digital-temporal-019","domain":"workflow","prompt":"Resolve date partitions, timezone, overlap, and duplicate risks for a late-arriving event handling."}
+{"id":"digital-temporal-020","domain":"workflow","prompt":"Resolve date partitions, timezone, overlap, and duplicate risks for a dashboard release approval."}
+{"id":"digital-cross_catalog-001","domain":"workflow","prompt":"Decide whether Firebase and GA4 may be joined for a daily engagement trend; require identity, consent, semantic, and date-alignment evidence."}
+{"id":"digital-cross_catalog-002","domain":"workflow","prompt":"Decide whether Firebase and GA4 may be joined for a weekly active-use summary; require identity, consent, semantic, and date-alignment evidence."}
+{"id":"digital-cross_catalog-003","domain":"workflow","prompt":"Decide whether Firebase and GA4 may be joined for a purchase conversion funnel; require identity, consent, semantic, and date-alignment evidence."}
+{"id":"digital-cross_catalog-004","domain":"workflow","prompt":"Decide whether Firebase and GA4 may be joined for a platform comparison; require identity, consent, semantic, and date-alignment evidence."}
+{"id":"digital-cross_catalog-005","domain":"workflow","prompt":"Decide whether Firebase and GA4 may be joined for a app-version adoption; require identity, consent, semantic, and date-alignment evidence."}
+{"id":"digital-cross_catalog-006","domain":"workflow","prompt":"Decide whether Firebase and GA4 may be joined for a event-volume anomaly; require identity, consent, semantic, and date-alignment evidence."}
+{"id":"digital-cross_catalog-007","domain":"workflow","prompt":"Decide whether Firebase and GA4 may be joined for a campaign attribution; require identity, consent, semantic, and date-alignment evidence."}
+{"id":"digital-cross_catalog-008","domain":"workflow","prompt":"Decide whether Firebase and GA4 may be joined for a session quality; require identity, consent, semantic, and date-alignment evidence."}
+{"id":"digital-cross_catalog-009","domain":"workflow","prompt":"Decide whether Firebase and GA4 may be joined for a checkout abandonment; require identity, consent, semantic, and date-alignment evidence."}
+{"id":"digital-cross_catalog-010","domain":"workflow","prompt":"Decide whether Firebase and GA4 may be joined for a retention cohort; require identity, consent, semantic, and date-alignment evidence."}
+{"id":"digital-cross_catalog-011","domain":"workflow","prompt":"Decide whether Firebase and GA4 may be joined for a geographic rollup; require identity, consent, semantic, and date-alignment evidence."}
+{"id":"digital-cross_catalog-012","domain":"workflow","prompt":"Decide whether Firebase and GA4 may be joined for a device-category performance; require identity, consent, semantic, and date-alignment evidence."}
+{"id":"digital-cross_catalog-013","domain":"workflow","prompt":"Decide whether Firebase and GA4 may be joined for a event taxonomy audit; require identity, consent, semantic, and date-alignment evidence."}
+{"id":"digital-cross_catalog-014","domain":"workflow","prompt":"Decide whether Firebase and GA4 may be joined for a partition completeness; require identity, consent, semantic, and date-alignment evidence."}
+{"id":"digital-cross_catalog-015","domain":"workflow","prompt":"Decide whether Firebase and GA4 may be joined for a timestamp consistency; require identity, consent, semantic, and date-alignment evidence."}
+{"id":"digital-cross_catalog-016","domain":"workflow","prompt":"Decide whether Firebase and GA4 may be joined for a metric-definition change; require identity, consent, semantic, and date-alignment evidence."}
+{"id":"digital-cross_catalog-017","domain":"workflow","prompt":"Decide whether Firebase and GA4 may be joined for a small-cell privacy review; require identity, consent, semantic, and date-alignment evidence."}
+{"id":"digital-cross_catalog-018","domain":"workflow","prompt":"Decide whether Firebase and GA4 may be joined for a cross-channel comparison; require identity, consent, semantic, and date-alignment evidence."}
+{"id":"digital-cross_catalog-019","domain":"workflow","prompt":"Decide whether Firebase and GA4 may be joined for a late-arriving event handling; require identity, consent, semantic, and date-alignment evidence."}
+{"id":"digital-cross_catalog-020","domain":"workflow","prompt":"Decide whether Firebase and GA4 may be joined for a dashboard release approval; require identity, consent, semantic, and date-alignment evidence."}
+{"id":"digital-agent-001","domain":"agent_registry","prompt":"Specify the agent-card capabilities, permissions, limits, and evaluation evidence needed to perform a daily engagement trend."}
+{"id":"digital-agent-002","domain":"agent_registry","prompt":"Specify the agent-card capabilities, permissions, limits, and evaluation evidence needed to perform a weekly active-use summary."}
+{"id":"digital-agent-003","domain":"agent_registry","prompt":"Specify the agent-card capabilities, permissions, limits, and evaluation evidence needed to perform a purchase conversion funnel."}
+{"id":"digital-agent-004","domain":"agent_registry","prompt":"Specify the agent-card capabilities, permissions, limits, and evaluation evidence needed to perform a platform comparison."}
+{"id":"digital-agent-005","domain":"agent_registry","prompt":"Specify the agent-card capabilities, permissions, limits, and evaluation evidence needed to perform a app-version adoption."}
+{"id":"digital-agent-006","domain":"agent_registry","prompt":"Specify the agent-card capabilities, permissions, limits, and evaluation evidence needed to perform a event-volume anomaly."}
+{"id":"digital-agent-007","domain":"agent_registry","prompt":"Specify the agent-card capabilities, permissions, limits, and evaluation evidence needed to perform a campaign attribution."}
+{"id":"digital-agent-008","domain":"agent_registry","prompt":"Specify the agent-card capabilities, permissions, limits, and evaluation evidence needed to perform a session quality."}
+{"id":"digital-agent-009","domain":"agent_registry","prompt":"Specify the agent-card capabilities, permissions, limits, and evaluation evidence needed to perform a checkout abandonment."}
+{"id":"digital-agent-010","domain":"agent_registry","prompt":"Specify the agent-card capabilities, permissions, limits, and evaluation evidence needed to perform a retention cohort."}
+{"id":"digital-agent-011","domain":"agent_registry","prompt":"Specify the agent-card capabilities, permissions, limits, and evaluation evidence needed to perform a geographic rollup."}
+{"id":"digital-agent-012","domain":"agent_registry","prompt":"Specify the agent-card capabilities, permissions, limits, and evaluation evidence needed to perform a device-category performance."}
+{"id":"digital-agent-013","domain":"agent_registry","prompt":"Specify the agent-card capabilities, permissions, limits, and evaluation evidence needed to perform a event taxonomy audit."}
+{"id":"digital-agent-014","domain":"agent_registry","prompt":"Specify the agent-card capabilities, permissions, limits, and evaluation evidence needed to perform a partition completeness."}
+{"id":"digital-agent-015","domain":"agent_registry","prompt":"Specify the agent-card capabilities, permissions, limits, and evaluation evidence needed to perform a timestamp consistency."}
+{"id":"digital-agent-016","domain":"agent_registry","prompt":"Specify the agent-card capabilities, permissions, limits, and evaluation evidence needed to perform a metric-definition change."}
+{"id":"digital-agent-017","domain":"agent_registry","prompt":"Specify the agent-card capabilities, permissions, limits, and evaluation evidence needed to perform a small-cell privacy review."}
+{"id":"digital-agent-018","domain":"agent_registry","prompt":"Specify the agent-card capabilities, permissions, limits, and evaluation evidence needed to perform a cross-channel comparison."}
+{"id":"digital-agent-019","domain":"agent_registry","prompt":"Specify the agent-card capabilities, permissions, limits, and evaluation evidence needed to perform a late-arriving event handling."}
+{"id":"digital-agent-020","domain":"agent_registry","prompt":"Specify the agent-card capabilities, permissions, limits, and evaluation evidence needed to perform a dashboard release approval."}
+{"id":"digital-incident-001","domain":"workflow","prompt":"Design a trace for detecting, containing, and documenting a failed daily engagement trend run without retaining raw identifiers."}
+{"id":"digital-incident-002","domain":"workflow","prompt":"Design a trace for detecting, containing, and documenting a failed weekly active-use summary run without retaining raw identifiers."}
+{"id":"digital-incident-003","domain":"workflow","prompt":"Design a trace for detecting, containing, and documenting a failed purchase conversion funnel run without retaining raw identifiers."}
+{"id":"digital-incident-004","domain":"workflow","prompt":"Design a trace for detecting, containing, and documenting a failed platform comparison run without retaining raw identifiers."}
+{"id":"digital-incident-005","domain":"workflow","prompt":"Design a trace for detecting, containing, and documenting a failed app-version adoption run without retaining raw identifiers."}
+{"id":"digital-incident-006","domain":"workflow","prompt":"Design a trace for detecting, containing, and documenting a failed event-volume anomaly run without retaining raw identifiers."}
+{"id":"digital-incident-007","domain":"workflow","prompt":"Design a trace for detecting, containing, and documenting a failed campaign attribution run without retaining raw identifiers."}
+{"id":"digital-incident-008","domain":"workflow","prompt":"Design a trace for detecting, containing, and documenting a failed session quality run without retaining raw identifiers."}
+{"id":"digital-incident-009","domain":"workflow","prompt":"Design a trace for detecting, containing, and documenting a failed checkout abandonment run without retaining raw identifiers."}
+{"id":"digital-incident-010","domain":"workflow","prompt":"Design a trace for detecting, containing, and documenting a failed retention cohort run without retaining raw identifiers."}
+{"id":"digital-incident-011","domain":"workflow","prompt":"Design a trace for detecting, containing, and documenting a failed geographic rollup run without retaining raw identifiers."}
+{"id":"digital-incident-012","domain":"workflow","prompt":"Design a trace for detecting, containing, and documenting a failed device-category performance run without retaining raw identifiers."}
+{"id":"digital-incident-013","domain":"workflow","prompt":"Design a trace for detecting, containing, and documenting a failed event taxonomy audit run without retaining raw identifiers."}
+{"id":"digital-incident-014","domain":"workflow","prompt":"Design a trace for detecting, containing, and documenting a failed partition completeness run without retaining raw identifiers."}
+{"id":"digital-incident-015","domain":"workflow","prompt":"Design a trace for detecting, containing, and documenting a failed timestamp consistency run without retaining raw identifiers."}
+{"id":"digital-incident-016","domain":"workflow","prompt":"Design a trace for detecting, containing, and documenting a failed metric-definition change run without retaining raw identifiers."}
+{"id":"digital-incident-017","domain":"workflow","prompt":"Design a trace for detecting, containing, and documenting a failed small-cell privacy review run without retaining raw identifiers."}
+{"id":"digital-incident-018","domain":"workflow","prompt":"Design a trace for detecting, containing, and documenting a failed cross-channel comparison run without retaining raw identifiers."}
+{"id":"digital-incident-019","domain":"workflow","prompt":"Design a trace for detecting, containing, and documenting a failed late-arriving event handling run without retaining raw identifiers."}
+{"id":"digital-incident-020","domain":"workflow","prompt":"Design a trace for detecting, containing, and documenting a failed dashboard release approval run without retaining raw identifiers."}

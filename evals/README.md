@@ -50,6 +50,16 @@ The first LoRA pipeline-validation run succeeded as job `ftjob-a16a0aa9669547759
 
 Checkpoint diagnostics improved modestly during that run: training loss decreased from 4.3062 to 4.2970 and validation loss decreased from 4.1036 to 4.0809. Lower loss is better, but these losses measure next-token prediction on the tiny train/validation splits; they are not GSM8K, MMLU, ARC, GPQA, or CRAFT benchmark scores.
 
+## Training-session history
+
+| Session | Split | Tokens | Final train loss | Final validation loss | Status |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Initial pipeline validation | 2 / 1 | 1,437 | 4.2970 | 4.0809 | Succeeded; evaluation pending |
+| Digital Analytics small batch | 7 / 1 | 5,058 | 4.5051 | 4.1839 | Succeeded; evaluation pending |
+| Digital Analytics expanded batch | 100 / 100 | 76,875 | 6.0544 | 5.9859 | Succeeded; evaluation pending |
+
+Absolute loss values are not directly comparable as model-quality scores because each session used different data. The dashboard charts show within-session direction and cross-session values with this warning. A fair base-versus-LoRA evaluation still requires deploying the adapter and sending identical held-out prompts to both models with identical generation settings.
+
 ## Sources
 
 - [Qwythos source model card](https://huggingface.co/empero-ai/Qwythos-9B-Claude-Mythos-5-1M)

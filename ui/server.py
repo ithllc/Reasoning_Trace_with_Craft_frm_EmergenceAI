@@ -16,18 +16,20 @@ sys.path.insert(0, str(ROOT))
 from scripts import pipeline  # noqa: E402
 
 STATIC = Path(__file__).resolve().parent / "static"
-TEACHER_DATA = ROOT / "data" / "generated" / "teacher.jsonl"
+TEACHER_DATA = ROOT / "data" / "generated" / "digital-analytics-200-teacher.jsonl"
 
 
 def dashboard() -> dict:
     pipeline.load_dotenv()
     config = pipeline.load_json(ROOT / "config" / "pipeline.json")
-    manifest_path = ROOT / "artifacts" / "dataset" / "manifest.json"
+    manifest_path = ROOT / "artifacts" / "digital-analytics-200-dataset" / "manifest.json"
     manifest = pipeline.load_json(manifest_path) if manifest_path.exists() else None
     examples = pipeline.read_jsonl(TEACHER_DATA) if TEACHER_DATA.exists() else []
     evaluations = pipeline.load_json(ROOT / "evals" / "qwythos-suite.json")
-    result_path = ROOT / "evals" / "results" / "ftjob-a16a0aa96695477593c126598b12f88b.json"
-    training_result = pipeline.load_json(result_path) if result_path.exists() else None
+    result_paths = sorted((ROOT / "evals" / "results").glob("ftjob-*.json"))
+    training_history = [pipeline.load_json(path) for path in result_paths]
+    training_history.sort(key=lambda item: item.get("session_order", 0))
+    training_result = next((item for item in training_history if item.get("job_id") == "ftjob-4bfaa9ef51994ed5bd1924f58d686c2e"), None)
     try:
         jobs = pipeline.api_request("GET", "fine_tuning/jobs?limit=20").get("data", [])
         jobs_error = None
@@ -48,6 +50,7 @@ def dashboard() -> dict:
         } for row in examples],
         "evaluations": evaluations,
         "training_result": training_result,
+        "training_history": training_history,
         "jobs": [{
             key: job.get(key) for key in (
                 "id", "model", "status", "created_at", "finished_at", "trained_steps", "total_steps", "trained_tokens", "error"

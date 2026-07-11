@@ -1,5 +1,7 @@
 {
   "job_id": "ftjob-a16a0aa96695477593c126598b12f88b",
+  "label": "Initial pipeline validation — 3 examples",
+  "session_order": 1,
   "status": "succeeded",
   "model": "Qwen/Qwen3-30B-A3B-Instruct-2507",
   "method": "LoRA",
@@ -9,6 +11,10 @@
   "trained_steps": 3,
   "total_steps": 3,
   "trained_tokens": 1437,
+  "dataset_dir": "artifacts/dataset",
+  "duration_seconds": 476,
+  "time_limit_seconds": 900,
+  "context_length": 8192,
   "checkpoint_metrics": [
     {"step": 1, "train_loss": 4.3061604499816895, "validation_loss": 4.103560447692871},
     {"step": 2, "train_loss": 4.303074836730957, "validation_loss": 4.08494234085083},

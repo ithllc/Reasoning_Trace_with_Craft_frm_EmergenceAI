@@ -20,6 +20,7 @@
     "project_id": "8c5c41d7-19e0-45ba-8bf6-57fc2706bf1b",
     "oauth_client_id": "em-runtime-mcp",
     "demo_connection": "github-repos-8c5c41d7",
+    "digital_analytics_connections": ["firebase-8c5c41d7", "ga4-8c5c41d7"],
     "domains": ["data_catalog", "workflow", "agent_registry"],
     "tenant_mutations_enabled": false
   },
@@ -28,9 +29,9 @@
     "project_id": "aiproject-e00g1a833vjes1bvhv",
     "target_fine_tuning_supported_as_of_2026_07_11": true,
     "training": {
-      "suffix": "craft-reasoning-traces",
+      "suffix": "craft-digital-analytics",
       "seed": 42,
-      "validation_fraction": 0.1,
+      "validation_fraction": 0.5,
       "hyperparameters": {
         "batch_size": 16,
         "learning_rate": 0.00001,

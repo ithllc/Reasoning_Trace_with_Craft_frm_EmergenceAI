@@ -85,6 +85,93 @@ async def run(command: str, output: Path | None = None) -> None:
             names = {tool.name for tool in tools.tools}
             if "list_data_connections" not in names:
                 raise RuntimeError("CRAFT does not expose list_data_connections")
+            if command in {"all-catalogs", "dev-infrastructure", "digital-analytics"}:
+                connections: list[dict[str, Any]] = []
+                page = 1
+                while True:
+                    result = await session.call_tool("list_data_connections", {"page": page, "limit": 100})
+                    if result.isError:
+                        raise RuntimeError(json.dumps(content_json(result)))
+                    page_data = content_json(result)
+                    items = page_data.get("connections", page_data.get("data", []))
+                    connections.extend(items)
+                    if len(items) < 100:
+                        break
+                    page += 1
+                catalogs = []
+                for connection_item in connections:
+                    slug = connection_item["slug"]
+                    databases = await session.call_tool("list_databases", {"connection": slug, "limit": 200})
+                    if databases.isError:
+                        raise RuntimeError(json.dumps(content_json(databases)))
+                    catalogs.append({"connection": connection_item, "databases": content_json(databases)})
+                search_term = "Digital Analytics" if command == "digital-analytics" else "Dev Infrastructure"
+                search = await session.call_tool("search_schema", {"query": search_term, "limit": 200})
+                if search.isError:
+                    raise RuntimeError(json.dumps(content_json(search)))
+                selected_details = []
+                if command in {"dev-infrastructure", "digital-analytics"}:
+                    selected_slugs = (
+                        {"firebase-8c5c41d7", "ga4-8c5c41d7"}
+                        if command == "digital-analytics"
+                        else {GITHUB_CONNECTION, "deps-dev-v1-8c5c41d7"}
+                    )
+                    for catalog in catalogs:
+                        connection_item = catalog["connection"]
+                        if connection_item["slug"] not in selected_slugs:
+                            continue
+                        database_results = catalog["databases"].get("list_metadata", {}).get("results", [])
+                        for database in database_results:
+                            database_schema_result = await session.call_tool("get_schema", {
+                                "connection": connection_item["slug"],
+                                "fqn": database["fully_qualified_name"],
+                                "include_children": True,
+                            })
+                            if database_schema_result.isError:
+                                raise RuntimeError(json.dumps(content_json(database_schema_result)))
+                            database_schema = content_json(database_schema_result)
+                            schemas = []
+                            for schema in database_schema.get("metadata", {}).get("children", []):
+                                schema_result = await session.call_tool("get_schema", {
+                                    "connection": connection_item["slug"],
+                                    "fqn": schema["fully_qualified_name"],
+                                    "include_children": True,
+                                })
+                                if schema_result.isError:
+                                    raise RuntimeError(json.dumps(content_json(schema_result)))
+                                schema_data = content_json(schema_result)
+                                tables = []
+                                for table in schema_data.get("metadata", {}).get("children", []):
+                                    table_result = await session.call_tool("get_schema", {
+                                        "connection": connection_item["slug"],
+                                        "fqn": table["fully_qualified_name"],
+                                        "include_children": True,
+                                    })
+                                    if table_result.isError:
+                                        raise RuntimeError(json.dumps(content_json(table_result)))
+                                    tables.append(content_json(table_result))
+                                schemas.append({"schema": schema_data, "tables": tables})
+                            selected_details.append({
+                                "connection": connection_item,
+                                "database": database,
+                                "database_schema": database_schema,
+                                "schemas": schemas,
+                            })
+                payload = {
+                    "scope": "all project data connections and their databases",
+                    "connection_count": len(connections),
+                    "catalogs": catalogs,
+                    "category_search": {"term": search_term, "result": content_json(search)},
+                    "selected_category_catalogs": selected_details,
+                }
+                rendered = json.dumps(payload, indent=2)
+                if output:
+                    output.parent.mkdir(parents=True, exist_ok=True)
+                    output.write_text(rendered + "\n", encoding="utf-8")
+                    print(str(output))
+                else:
+                    print(rendered)
+                return
             connections_result = await session.call_tool("list_data_connections", {"search": "GITHUB_REPOS"})
             if connections_result.isError:
                 raise RuntimeError(json.dumps(content_json(connections_result)))
@@ -139,7 +226,7 @@ async def run(command: str, output: Path | None = None) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=["tools", "github-catalog", "github-schema"])
+    parser.add_argument("command", choices=["tools", "all-catalogs", "dev-infrastructure", "digital-analytics", "github-catalog", "github-schema"])
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     try:
