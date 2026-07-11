@@ -160,14 +160,15 @@ def command_preflight(args: argparse.Namespace) -> int:
     target = config["student"]["model"]
     result = api_request("GET", "models?verbose=true")
     live_ids = {item.get("id") for item in result.get("data", [])}
-    related_ids = sorted(model_id for model_id in live_ids if isinstance(model_id, str) and "qwen3.5" in model_id.lower())
+    family = target.split("/", 1)[-1].split("-", 1)[0].lower()
+    related_ids = sorted(model_id for model_id in live_ids if isinstance(model_id, str) and family in model_id.lower())
     report = {
         "checked_at": datetime.now(timezone.utc).isoformat(),
         "target_model": target,
         "present_in_live_model_catalog": target in live_ids,
         "related_live_model_ids": related_ids,
-        "documented_fine_tuning_support": config["nebius"]["fine_tuning_supported_as_of_2026_07_11"],
-        "safe_to_submit": target in live_ids and config["nebius"]["fine_tuning_supported_as_of_2026_07_11"],
+        "documented_fine_tuning_support": config["nebius"]["target_fine_tuning_supported_as_of_2026_07_11"],
+        "safe_to_submit": target in live_ids and config["nebius"]["target_fine_tuning_supported_as_of_2026_07_11"],
     }
     print(json.dumps(report, indent=2))
     return 0 if report["safe_to_submit"] else 2
@@ -193,6 +194,26 @@ def command_nebius_capabilities(_: argparse.Namespace) -> int:
         "fine_tuning_error": fine_tuning_error,
     }, indent=2))
     return 0 if fine_tuning_accessible else 2
+
+
+def command_student_smoke(args: argparse.Namespace) -> int:
+    config = load_json(args.config)
+    request = {
+        "model": config["student"]["model"],
+        "messages": [
+            {"role": "system", "content": "You are a concise CRAFT GitHub catalog analyst. Give an auditable decision summary, cite supplied catalog fields, and never invent tool results or hidden chain-of-thought."},
+            {"role": "user", "content": "A GITHUB_REPOS.SAMPLE_REPOS asset has repo_name and watch_count fields, but no recorded freshness or quality validation. May it be used directly in a customer-facing answer?"},
+        ],
+        "temperature": 0.2,
+        "max_tokens": 256,
+    }
+    result = api_request("POST", "chat/completions", body=json.dumps(request).encode(), content_type="application/json")
+    print(json.dumps({
+        "model": result.get("model", config["student"]["model"]),
+        "answer": result["choices"][0]["message"]["content"],
+        "usage": result.get("usage"),
+    }, indent=2))
+    return 0
 
 
 def command_generate(args: argparse.Namespace) -> int:
@@ -287,8 +308,8 @@ def upload_file(path: Path) -> str:
 
 def command_submit(args: argparse.Namespace) -> int:
     config = load_json(args.config)
-    if not config["nebius"]["fine_tuning_supported_as_of_2026_07_11"]:
-        raise RuntimeError("Blocked: Nebius does not currently document fine-tuning support for Qwen/Qwen3.5-9B. Re-verify official support before changing the gate.")
+    if not config["nebius"]["target_fine_tuning_supported_as_of_2026_07_11"]:
+        raise RuntimeError(f"Blocked: Nebius does not currently document fine-tuning support for {config['student']['model']}. Re-verify official support before changing the gate.")
     train_id = upload_file(args.dataset_dir / "train.jsonl")
     validation_path = args.dataset_dir / "validation.jsonl"
     validation_id = upload_file(validation_path) if validation_path.stat().st_size else None
@@ -340,6 +361,7 @@ def parser() -> argparse.ArgumentParser:
     commands.add_parser("inventory").set_defaults(func=command_inventory)
     commands.add_parser("preflight-nebius").set_defaults(func=command_preflight)
     commands.add_parser("nebius-capabilities").set_defaults(func=command_nebius_capabilities)
+    commands.add_parser("student-smoke").set_defaults(func=command_student_smoke)
     generate = commands.add_parser("generate")
     generate.add_argument("--seeds", type=Path, default=ROOT / "data" / "seeds" / "example-prompts.jsonl")
     generate.add_argument("--output", type=Path, default=ROOT / "data" / "generated" / "teacher.jsonl")

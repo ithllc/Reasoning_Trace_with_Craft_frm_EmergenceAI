@@ -1,8 +1,10 @@
 # Emergence CRAFT Reasoning Trace Workspace
 
-This workspace designs auditable reasoning traces with Codex teacher **Sol** (`gpt-5.6-sol`), the live Emergence.ai CRAFT hackathon MCP server, and Nebius Token Factory. The student target is `Qwen/Qwen3.5-9B`.
+This workspace designs auditable reasoning traces with Codex teacher **Sol** (`gpt-5.6-sol`), the live Emergence.ai CRAFT hackathon MCP server, and Nebius Token Factory. The student target is `openbmb/MiniCPM-V-4_5` (9B).
 
-It now also contains a gated automation pipeline for distilling those traces into `Qwen/Qwen3.5-9B` and fine-tuning through Nebius Token Factory. Start with [the automation guide](docs/automation.md) and [tool inventory](docs/tool-inventory.md).
+Model decision: MiniCPM-V-4_5 9B is used because the authenticated Nebius Token Factory project does not expose the originally requested `Qwen/Qwen3.5-9B`. MiniCPM is available for inference through the project API. Fine-tuning eligibility is checked separately and remains gated until Nebius supports this exact base.
+
+It now also contains a gated automation pipeline for distilling those traces into `openbmb/MiniCPM-V-4_5` and fine-tuning through Nebius Token Factory. Start with [the automation guide](docs/automation.md) and [tool inventory](docs/tool-inventory.md).
 
 ## Where everything lives
 
@@ -80,12 +82,13 @@ Then run:
 python3 scripts/craft_mcp.py tools
 python3 scripts/craft_mcp.py github-schema --output data/generated/github-catalog-snapshot.json
 python3 scripts/pipeline.py preflight-nebius
+python3 scripts/pipeline.py student-smoke
 python3 scripts/pipeline.py generate
 python3 scripts/pipeline.py prepare --input data/generated/teacher.jsonl
-python3 scripts/pipeline.py eval --model Qwen/Qwen3.5-9B
+python3 scripts/pipeline.py eval --model openbmb/MiniCPM-V-4_5
 ```
 
-`submit` is intentionally gated. The authenticated Nebius project currently does not list `Qwen/Qwen3.5-9B`; its live Qwen3.5 result is `Qwen/Qwen3.5-397B-A17B`, while current public post-training documentation lists 27B rather than 9B. The pipeline will not substitute models or incur training spend until exact 9B support is available.
+`submit` is intentionally gated. The authenticated Nebius project exposes `openbmb/MiniCPM-V-4_5` for inference, but current public post-training documentation does not list it as a fine-tuning base. The pipeline will not substitute models or incur training spend until exact MiniCPM fine-tuning support is available.
 
 The verified CRAFT GitHub snapshot currently contains one schema, six tables, and 30 columns. The first Sol batch contains catalog, workflow, and agent-registry examples. Examples without live CRAFT evidence are labeled `needs_review` and are not approved for training automatically. The hackathon MCP currently exposes catalog/schema, SQL generation and execution, result retrieval, terminology, chart, and sampling tools; it does not expose workflow or agent-registry tools.
 

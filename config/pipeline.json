@@ -9,7 +9,9 @@
     "use_hidden_chain_of_thought": false
   },
   "student": {
-    "model": "Qwen/Qwen3.5-9B",
+    "model": "openbmb/MiniCPM-V-4_5",
+    "parameter_count": "9B",
+    "modality": "image-text-to-text",
     "license": "Apache-2.0"
   },
   "craft": {
@@ -24,8 +26,7 @@
   "nebius": {
     "base_url": "https://api.tokenfactory.nebius.com/v1/",
     "project_id": "aiproject-e00g1a833vjes1bvhv",
-    "fine_tuning_supported_as_of_2026_07_11": false,
-    "documented_qwen35_model": "Qwen/Qwen3.5-27B",
+    "target_fine_tuning_supported_as_of_2026_07_11": false,
     "training": {
       "suffix": "craft-reasoning-traces",
       "seed": 42,

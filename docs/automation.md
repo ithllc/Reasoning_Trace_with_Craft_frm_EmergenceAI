@@ -2,9 +2,13 @@
 
 ## Goal
 
-Distill auditable CRAFT-oriented behavior from Sol (the Codex teacher) into `Qwen/Qwen3.5-9B`, fine-tune through Nebius Token Factory, and compare the result with the evaluation recipe published for Qwythos-9B.
+Distill auditable CRAFT-oriented behavior from Sol (the Codex teacher) into `openbmb/MiniCPM-V-4_5` (9B), fine-tune through Nebius Token Factory, and compare the result with the evaluation recipe published for Qwythos-9B.
 
 The training examples contain final answers plus concise evidence, action, policy, and validation summaries. They do not collect hidden chain-of-thought.
+
+## Model selection decision
+
+The original student target was `Qwen/Qwen3.5-9B`. The authenticated Nebius project does not expose that model, so the active student is `openbmb/MiniCPM-V-4_5`, a 9B multimodal generative model that is visible through the project API. This is an explicit availability-driven substitution, not an alias. Inference availability is confirmed; Nebius fine-tuning eligibility for MiniCPM remains a separate gate.
 
 ## Pipeline
 
@@ -29,9 +33,9 @@ Sol / Codex teacher --structured output--> validated JSONL
 
 ## Current blocking fact
 
-As of 2026-07-11, Nebius's official post-training model list documents `Qwen/Qwen3.5-27B` for full-parameter fine-tuning, but not `Qwen/Qwen3.5-9B`. The requested 9B model is real and is the base used by Qwythos, but it cannot currently be submitted as a supported Token Factory fine-tuning base based on public documentation.
+As of 2026-07-11, the authenticated Nebius project exposes `openbmb/MiniCPM-V-4_5` for inference, but Nebius's official post-training model list does not document it as a supported fine-tuning base.
 
-The target remains 9B. `pipeline.py submit` intentionally fails before uploads or spend while the support gate is false. Recheck both the official supported-model page and the authenticated live model catalog before changing that gate.
+The target remains MiniCPM 9B. `pipeline.py submit` intentionally fails before uploads or spend while the support gate is false. Recheck both the official supported-model page and authenticated account eligibility before changing that gate.
 
 ## Hackathon CRAFT connection
 
@@ -67,7 +71,7 @@ NEBIUS_API_KEY=... python3 scripts/pipeline.py preflight-nebius
 NEBIUS_API_KEY=... python3 scripts/pipeline.py submit
 
 # Print the Qwythos-compatible lm-eval command; add --run to execute it
-python3 scripts/pipeline.py eval --model Qwen/Qwen3.5-9B
+python3 scripts/pipeline.py eval --model openbmb/MiniCPM-V-4_5
 ```
 
 ## Teacher identity
@@ -79,7 +83,7 @@ The teacher is pinned to `gpt-5.6-sol`, which is present in this environment's C
 - [Qwythos-9B source model card](https://huggingface.co/empero-ai/Qwythos-9B-Claude-Mythos-5-1M)
 - [Qwythos GGUF model card](https://huggingface.co/empero-ai/Qwythos-9B-Claude-Mythos-5-1M-GGUF)
 - [Qwythos published tool-test transcript](https://huggingface.co/empero-ai/Qwythos-9B-Claude-Mythos-5-1M/blob/main/evals/tool_test_outputs.md)
-- [Qwen3.5-9B model card](https://huggingface.co/Qwen/Qwen3.5-9B)
+- [MiniCPM-V-4_5 model card](https://huggingface.co/openbmb/MiniCPM-V-4_5)
 - [Nebius supported post-training models](https://docs.tokenfactory.nebius.com/post-training/models)
 - [Nebius supervised fine-tuning API guide](https://docs.tokenfactory.nebius.com/post-training/how-to-fine-tune)
 - [CRAFT solution developer guide](https://docs.emergence.ai/guides/solution-dev/overview)
