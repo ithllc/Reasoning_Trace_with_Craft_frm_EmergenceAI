@@ -2,13 +2,13 @@
 
 ## Goal
 
-Distill auditable CRAFT-oriented behavior from Sol (the Codex teacher) into `openbmb/MiniCPM-V-4_5` (9B), fine-tune through Nebius Token Factory, and compare the result with the evaluation recipe published for Qwythos-9B.
+Distill auditable CRAFT-oriented behavior from Sol into `Qwen/Qwen3-30B-A3B-Instruct-2507` with LoRA through Nebius Token Factory, and compare the result with the evaluation recipe published for Qwythos-9B.
 
 The training examples contain final answers plus concise evidence, action, policy, and validation summaries. They do not collect hidden chain-of-thought.
 
 ## Model selection decision
 
-The original student target was `Qwen/Qwen3.5-9B`. The authenticated Nebius project does not expose that model, so the active student is `openbmb/MiniCPM-V-4_5`, a 9B multimodal generative model that is visible through the project API. This is an explicit availability-driven substitution, not an alias. Inference availability is confirmed; Nebius fine-tuning eligibility for MiniCPM remains a separate gate.
+The original student target was `Qwen/Qwen3.5-9B`, which the authenticated project does not expose. The active target is now `Qwen/Qwen3-30B-A3B-Instruct-2507`, which is both API-visible and documented for LoRA. It has about 30B total and 3B active parameters per token.
 
 ## Pipeline
 
@@ -33,9 +33,9 @@ Sol / Codex teacher --structured output--> validated JSONL
 
 ## Current blocking fact
 
-As of 2026-07-11, the authenticated Nebius project exposes `openbmb/MiniCPM-V-4_5` for inference, but Nebius's official post-training model list does not document it as a supported fine-tuning base.
+As of 2026-07-11, Nebius documents the selected Qwen3 MoE model for LoRA and full-parameter fine-tuning, and the authenticated project exposes its exact ID.
 
-The target remains MiniCPM 9B. `pipeline.py submit` intentionally fails before uploads or spend while the support gate is false. Recheck both the official supported-model page and authenticated account eligibility before changing that gate.
+The configuration selects LoRA (`lora: true`, rank 16, alpha 16, dropout 0.05). Model eligibility passes, but dataset review remains mandatory before submission.
 
 ## Hackathon CRAFT connection
 
@@ -71,7 +71,7 @@ NEBIUS_API_KEY=... python3 scripts/pipeline.py preflight-nebius
 NEBIUS_API_KEY=... python3 scripts/pipeline.py submit
 
 # Print the Qwythos-compatible lm-eval command; add --run to execute it
-python3 scripts/pipeline.py eval --model openbmb/MiniCPM-V-4_5
+python3 scripts/pipeline.py eval --model Qwen/Qwen3-30B-A3B-Instruct-2507
 ```
 
 ## Teacher identity
@@ -83,7 +83,7 @@ The teacher is pinned to `gpt-5.6-sol`, which is present in this environment's C
 - [Qwythos-9B source model card](https://huggingface.co/empero-ai/Qwythos-9B-Claude-Mythos-5-1M)
 - [Qwythos GGUF model card](https://huggingface.co/empero-ai/Qwythos-9B-Claude-Mythos-5-1M-GGUF)
 - [Qwythos published tool-test transcript](https://huggingface.co/empero-ai/Qwythos-9B-Claude-Mythos-5-1M/blob/main/evals/tool_test_outputs.md)
-- [MiniCPM-V-4_5 model card](https://huggingface.co/openbmb/MiniCPM-V-4_5)
+- [Qwen3-30B-A3B-Instruct-2507 model card](https://huggingface.co/Qwen/Qwen3-30B-A3B-Instruct-2507)
 - [Nebius supported post-training models](https://docs.tokenfactory.nebius.com/post-training/models)
 - [Nebius supervised fine-tuning API guide](https://docs.tokenfactory.nebius.com/post-training/how-to-fine-tune)
 - [CRAFT solution developer guide](https://docs.emergence.ai/guides/solution-dev/overview)

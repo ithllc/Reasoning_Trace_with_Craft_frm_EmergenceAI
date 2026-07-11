@@ -11,7 +11,7 @@ Help the user design auditable reasoning traces that relate to four CRAFT domain
 3. Agent Registry
 4. Service Registry
 
-Use those traces to create safe distillation examples for the `openbmb/MiniCPM-V-4_5` 9B student and automate Nebius Token Factory fine-tuning without silently changing the requested model.
+Use those traces to create safe distillation examples for the `Qwen/Qwen3-30B-A3B-Instruct-2507` student and automate Nebius Token Factory LoRA fine-tuning without silently changing the requested model.
 
 ## Working rules
 
@@ -24,7 +24,8 @@ Use those traces to create safe distillation examples for the `openbmb/MiniCPM-V
 - Start with a single small example and validate it before generalizing.
 - Ask before making calls that mutate a live CRAFT deployment.
 - Treat Nebius uploads, fine-tuning job creation, deployment, and deletion as explicit live mutations.
-- Keep the MiniCPM-V-4_5 Nebius support gate closed until the exact model appears in current official fine-tuning documentation and the authenticated account supports it.
+- Use LoRA, not full-parameter fine-tuning, for the selected Qwen3-30B-A3B model.
+- Submit training only after examples are reviewed and validation gates pass.
 
 ## Deliverable convention
 
