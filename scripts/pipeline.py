@@ -81,6 +81,51 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def compact_catalog(snapshot: dict[str, Any]) -> dict[str, Any]:
+    """Keep grounding fields while removing repetitive CRAFT transport metadata."""
+    compact: dict[str, Any] = {
+        "connection": snapshot["selected_connection"],
+        "database": "GITHUB_REPOS",
+        "schemas": [],
+    }
+    for schema_entry in snapshot.get("schemas", []):
+        schema_metadata = schema_entry["schema"]["metadata"]
+        compact_schema = {
+            "name": schema_metadata["name"],
+            "fully_qualified_name": schema_metadata["fully_qualified_name"],
+            "description": schema_metadata.get("description"),
+            "tables": [],
+        }
+        for table_entry in schema_entry.get("tables", []):
+            table = table_entry["metadata"]
+            compact_schema["tables"].append({
+                "name": table["name"],
+                "fully_qualified_name": table["fully_qualified_name"],
+                "description": table.get("description"),
+                "summary": table.get("summary_text"),
+                "classifications": {
+                    "pii": table.get("is_pii_tagged"),
+                    "sensitive": table.get("is_sensitivity_tagged"),
+                    "data_quality": table.get("is_dq_tagged"),
+                    "tags": table.get("tags", []),
+                },
+                "columns": [{
+                    "name": column["name"],
+                    "fully_qualified_name": column["fully_qualified_name"],
+                    "data_type": column.get("data_type"),
+                    "nullable": column.get("nullable"),
+                    "description": column.get("description"),
+                    "business_definition": column.get("business_definition"),
+                    "business_rules": column.get("business_rules"),
+                    "pii": column.get("is_pii_tagged"),
+                    "sensitive": column.get("is_sensitivity_tagged"),
+                    "tags": column.get("tags", []),
+                } for column in table.get("children", [])],
+            })
+        compact["schemas"].append(compact_schema)
+    return compact
+
+
 def api_request(method: str, path: str, *, body: bytes | None = None, content_type: str | None = None) -> Any:
     token = os.environ.get("NEBIUS_API_KEY")
     if not token:
@@ -131,25 +176,27 @@ def command_preflight(args: argparse.Namespace) -> int:
 def command_generate(args: argparse.Namespace) -> int:
     config = load_json(args.config)
     seeds = read_jsonl(args.seeds)
+    catalog = compact_catalog(load_json(args.catalog))
     output = args.output
     prompt = f"""You are Sol, the Codex teacher for an auditable model-distillation dataset.
-Use the live craft MCP server for project-scoped data catalog, workflow, and registered-agent evidence. Use emergence-craft only for public documentation when needed.
+Use the supplied read-only CRAFT GitHub catalog snapshot as project-scoped data evidence. Use emergence-craft for public workflow and agent-registry documentation when needed. Do not call live CRAFT tools in this headless run.
 Create one high-quality example for every seed below. Return only JSON matching the supplied output schema.
 Use concise decision summaries, evidence references, and tool-call summaries. Do not expose or request hidden chain-of-thought.
 Never include credentials, private tenant data, or invented APIs. Label uncertainty with validation=needs_review.
 Teacher label: {config['teacher']['requested_label']}
 Seeds: {json.dumps(seeds, ensure_ascii=False)}
+CRAFT GitHub catalog snapshot: {json.dumps(catalog, ensure_ascii=False)}
 """
     raw = output.with_suffix(".teacher.json")
     cmd = [
         "codex", "exec", "--ephemeral", "--sandbox", "read-only",
         "--output-schema", str(ROOT / "schemas" / "teacher-batch.schema.json"),
-        "--output-last-message", str(raw), prompt,
+        "--output-last-message", str(raw), "-",
     ]
     model = os.environ.get(config["teacher"]["model_env"])
     if model:
         cmd[2:2] = ["--model", model]
-    subprocess.run(cmd, cwd=ROOT, check=True)
+    subprocess.run(cmd, cwd=ROOT, input=prompt, text=True, check=True)
     batch = load_json(raw)
     rows = []
     for example in batch["examples"]:
@@ -273,6 +320,7 @@ def parser() -> argparse.ArgumentParser:
     generate = commands.add_parser("generate")
     generate.add_argument("--seeds", type=Path, default=ROOT / "data" / "seeds" / "example-prompts.jsonl")
     generate.add_argument("--output", type=Path, default=ROOT / "data" / "generated" / "teacher.jsonl")
+    generate.add_argument("--catalog", type=Path, default=ROOT / "data" / "generated" / "github-catalog-snapshot.json")
     generate.set_defaults(func=command_generate)
     prepare = commands.add_parser("prepare")
     prepare.add_argument("--input", type=Path, required=True)

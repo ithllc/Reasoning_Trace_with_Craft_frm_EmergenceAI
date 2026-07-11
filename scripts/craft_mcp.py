@@ -105,7 +105,29 @@ async def run(command: str, output: Path | None = None) -> None:
                 })
                 if schema_result.isError:
                     raise RuntimeError(json.dumps(content_json(schema_result)))
-                payload["schema"] = content_json(schema_result)
+                database_schema = content_json(schema_result)
+                payload["database_schema"] = database_schema
+                schemas = database_schema.get("metadata", {}).get("children", [])
+                payload["schemas"] = []
+                for schema in schemas:
+                    schema_fqn = schema["fully_qualified_name"]
+                    tables_result = await session.call_tool("get_schema", {
+                        "connection": connection, "fqn": schema_fqn, "include_children": True,
+                    })
+                    if tables_result.isError:
+                        raise RuntimeError(json.dumps(content_json(tables_result)))
+                    schema_data = content_json(tables_result)
+                    table_details = []
+                    for table in schema_data.get("metadata", {}).get("children", []):
+                        table_result = await session.call_tool("get_schema", {
+                            "connection": connection,
+                            "fqn": table["fully_qualified_name"],
+                            "include_children": True,
+                        })
+                        if table_result.isError:
+                            raise RuntimeError(json.dumps(content_json(table_result)))
+                        table_details.append(content_json(table_result))
+                    payload["schemas"].append({"schema": schema_data, "tables": table_details})
             rendered = json.dumps(payload, indent=2)
             if output:
                 output.parent.mkdir(parents=True, exist_ok=True)

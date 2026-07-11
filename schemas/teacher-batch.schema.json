@@ -9,7 +9,7 @@
       "additionalProperties": false,
       "required": ["agent_name", "model_label"],
       "properties": {
-        "agent_name": { "const": "Sol" },
+        "agent_name": { "type": "string", "const": "Sol" },
         "model_label": { "type": "string" }
       }
     },
@@ -47,6 +47,7 @@
                 "type": "array",
                 "items": {
                   "type": "object",
+                  "additionalProperties": false,
                   "required": ["tool", "purpose", "outcome"],
                   "properties": {
                     "tool": { "type": "string" },
@@ -63,4 +64,3 @@
     }
   }
 }
-

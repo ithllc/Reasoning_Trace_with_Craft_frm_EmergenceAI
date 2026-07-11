@@ -77,6 +77,8 @@ chmod 600 .env
 Then run:
 
 ```bash
+python3 scripts/craft_mcp.py tools
+python3 scripts/craft_mcp.py github-schema --output data/generated/github-catalog-snapshot.json
 python3 scripts/pipeline.py preflight-nebius
 python3 scripts/pipeline.py generate
 python3 scripts/pipeline.py prepare --input data/generated/teacher.jsonl
@@ -84,6 +86,8 @@ python3 scripts/pipeline.py eval --model Qwen/Qwen3.5-9B
 ```
 
 `submit` is intentionally gated. The authenticated Nebius project currently does not list `Qwen/Qwen3.5-9B`; its live Qwen3.5 result is `Qwen/Qwen3.5-397B-A17B`, while current public post-training documentation lists 27B rather than 9B. The pipeline will not substitute models or incur training spend until exact 9B support is available.
+
+The verified CRAFT GitHub snapshot currently contains one schema, six tables, and 30 columns. The first Sol batch contains catalog, workflow, and agent-registry examples. Examples without live CRAFT evidence are labeled `needs_review` and are not approved for training automatically. The hackathon MCP currently exposes catalog/schema, SQL generation and execution, result retrieval, terminology, chart, and sampling tools; it does not expose workflow or agent-registry tools.
 
 ## Useful commands
 

@@ -38,6 +38,21 @@ class PipelineTests(unittest.TestCase):
             self.assertEqual("process", os.environ["PIPELINE_TEST_VALUE"])
             self.assertEqual("loaded", os.environ["SECOND_VALUE"])
 
+    def test_compact_catalog_keeps_grounding_fields(self):
+        snapshot = {"selected_connection": "github", "schemas": [{
+            "schema": {"metadata": {"name": "GITHUB", "fully_qualified_name": "github.db.schema", "description": "d"}},
+            "tables": [{"metadata": {
+                "name": "repos", "fully_qualified_name": "github.db.schema.repos",
+                "description": "repos", "children": [{
+                    "name": "repo_name", "fully_qualified_name": "github.db.schema.repos.repo_name",
+                    "data_type": "VARCHAR", "description": "name",
+                }],
+            }}],
+        }]}
+        compact = pipeline.compact_catalog(snapshot)
+        self.assertEqual("github", compact["connection"])
+        self.assertEqual("repo_name", compact["schemas"][0]["tables"][0]["columns"][0]["name"])
+
 
 if __name__ == "__main__":
     unittest.main()
