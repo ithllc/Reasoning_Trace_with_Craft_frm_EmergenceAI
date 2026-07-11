@@ -132,7 +132,8 @@ def ask(question: str, config: dict | None = None) -> dict:
         {"role": "system", "content": (
             "You explain the CRAFT Reasoning Lab dashboard and project architecture. Answer only from the supplied "
             "dashboard JSON and whitelisted repository sources. Cite supporting repository paths inline in square "
-            "brackets, such as [docs/architecture.md]. Distinguish features actually used, features merely available, "
+            "brackets exactly once per claim, such as [docs/architecture.md]. Keep the entire answer under 300 words "
+            "and use at most eight concise bullets. Distinguish features actually used, features merely available, "
             "and planned or pending work. Treat config and result JSON as authoritative when narrative docs conflict. "
             "Be concise, define technical terms plainly, distinguish loss from benchmark scores, say when evidence is "
             "absent, and never expose or request credentials."
