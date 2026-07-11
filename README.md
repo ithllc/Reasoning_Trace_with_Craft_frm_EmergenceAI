@@ -120,7 +120,7 @@ The current teacher batch and grounding evidence are committed so collaborators 
 
 Reviewers should verify correctness, evidence references, policy decisions, tool outcomes, privacy, and absence of invented APIs before changing an example from `needs_review` to `passed`.
 
-The evaluation suite is visible in `evals/README.md` and `evals/qwythos-suite.json`. It shows the published Qwythos reference metrics, exact harness settings, tool-use criteria, and mandatory CRAFT promotion gates.
+The evaluation suite is documented in `evals/README.md`. The dashboard shows only methods actually used: dataset integrity, CRAFT evidence grounding, privacy/secret checks, bounded execution, and checkpoint train/validation loss. `evals/qwythos-suite.json` remains an unexecuted historical reference.
 
 The displayed Qwythos values are references, not this project's results. A fair base-versus-LoRA comparison is still pending deployment of a checkpoint and identical held-out prompts/settings against both the base and adapter.
 

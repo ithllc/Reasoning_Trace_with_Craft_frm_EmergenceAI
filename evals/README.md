@@ -1,8 +1,8 @@
 # LLM evaluations
 
-The evaluation program combines the published Qwythos recipe with CRAFT-specific quality gates.
+The current evaluation program uses dataset-integrity checks, CRAFT evidence verification, privacy/secret scanning, bounded-job status, and Nebius train/validation loss. It has not executed the published Qwythos benchmarks and does not claim those reference values as project results.
 
-## Published benchmark suite
+## Qwythos suite retained as an unexecuted reference
 
 The reproducible public portion uses EleutherAI `lm-evaluation-harness`, the Hugging Face backend, chat templating, a 100-example limit, and sampling values `temperature=0.6`, `top_p=0.95`, and `top_k=20`.
 
@@ -15,7 +15,19 @@ The reproducible public portion uses EleutherAI `lm-evaluation-harness`, the Hug
 | ARC Challenge | normalized accuracy | 0.410 |
 | GPQA Diamond CoT, zero-shot | flexible exact match | 0.580 |
 
-These values are references, not claims about the current student. Base and LoRA checkpoints must be evaluated with identical settings.
+These values are historical references only. They were not used to evaluate any project checkpoint and are no longer displayed as current evaluation metrics in the dashboard. If this suite is run later, base and LoRA checkpoints must use identical settings.
+
+## Methods actually used
+
+- deterministic JSONL validation, unique IDs, split counts, and source hashing;
+- verification that evidence references exist in the captured Firebase/GA4 metadata;
+- scanning for credential markers, raw source rows, and prohibited hidden reasoning;
+- Nebius job completion, trained steps/tokens, and wall-clock enforcement;
+- checkpoint training loss and validation loss.
+
+For the 200-example run, training loss moved from 6.0642 to 6.0544 and validation loss moved from 6.1477 to 5.9859. Lower is better within the same run. Because the 100/100 halves share ten deterministic templates, validation loss measures consistency rather than independent generalization.
+
+The base-versus-LoRA identical-prompt evaluation has not run because the adapter is not deployed. Until that happens, promotion remains blocked.
 
 Print the exact command:
 
