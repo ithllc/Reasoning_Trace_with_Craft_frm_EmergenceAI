@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-07-11T19:37:10.420293+00:00",
+  "seed": 42,
+  "source": "data/generated/teacher.jsonl",
+  "source_sha256": "5edf24887dd2ea6cec5bd4e75a24440a845322ab20acf421a43853600e5ad348",
+  "student_model": "Qwen/Qwen3.5-9B",
+  "train_examples": 2,
+  "validation_examples": 1
+}

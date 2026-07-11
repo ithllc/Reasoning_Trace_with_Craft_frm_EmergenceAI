@@ -1,0 +1,38 @@
+{
+  "name": "qwythos-compatible-plus-craft",
+  "reference_model": "empero-ai/Qwythos-9B-Claude-Mythos-5-1M",
+  "student_model": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+  "harness": {
+    "implementation": "lm-evaluation-harness",
+    "backend": "hf",
+    "apply_chat_template": true,
+    "limit": 100,
+    "generation": {
+      "temperature": 0.6,
+      "top_p": 0.95,
+      "top_k": 20,
+      "do_sample": true
+    }
+  },
+  "benchmarks": [
+    {"task": "gsm8k", "metrics": ["exact_match_flexible", "exact_match_strict"], "qwythos_reference": [0.86, 0.81]},
+    {"task": "mmlu", "metrics": ["accuracy"], "qwythos_reference": [0.575]},
+    {"task": "arc_challenge", "metrics": ["accuracy", "accuracy_normalized"], "qwythos_reference": [0.49, 0.41]},
+    {"task": "gpqa_diamond_cot_zeroshot", "metrics": ["exact_match_flexible"], "qwythos_reference": [0.58]}
+  ],
+  "tool_evals": {
+    "reference_case_count": 7,
+    "tools": ["python", "web_search"],
+    "metrics": ["tool_selection", "argument_validity", "result_grounding", "final_answer_correctness"]
+  },
+  "craft_evals": {
+    "catalog": "github-repos-8c5c41d7",
+    "metrics": ["evidence_fqn_validity", "policy_gate_accuracy", "no_invented_tools", "no_hidden_reasoning", "final_answer_grounding"],
+    "required_pass_rate": 1.0
+  },
+  "promotion_rules": {
+    "no_regression_vs_base": true,
+    "craft_required_pass_rate": 1.0,
+    "training_and_eval_ids_disjoint": true
+  }
+}

@@ -20,6 +20,7 @@ It now also contains a gated automation pipeline for distilling those traces int
 | Fine-tuning configuration | `config/pipeline.json` | Pins teacher, student, CRAFT, Nebius, and eval settings |
 | Automation CLI | `scripts/pipeline.py` | Generates, validates, submits, monitors, and evaluates |
 | Local credentials | `.env` | Git-ignored, mode `0600`; never commit this file |
+| LLM evaluation suite | `evals/` | Qwythos-compatible benchmarks, CRAFT gates, and results |
 
 The server is also registered in `/root/.codex/config.toml` under the name `emergence-craft`, so it is available outside this workspace too. That user file is managed by `codex mcp` commands; the project copy is the version-controlled declaration for this workspace.
 
@@ -91,6 +92,20 @@ python3 scripts/pipeline.py eval --model Qwen/Qwen3-30B-A3B-Instruct-2507
 Nebius model eligibility now passes. Dataset quality remains the submission gate: the initial three-example batch is marked `needs_review` and will not be used for a paid LoRA job until reviewed examples and held-out evaluations are ready.
 
 The verified CRAFT GitHub snapshot currently contains one schema, six tables, and 30 columns. The first Sol batch contains catalog, workflow, and agent-registry examples. Examples without live CRAFT evidence are labeled `needs_review` and are not approved for training automatically. The hackathon MCP currently exposes catalog/schema, SQL generation and execution, result retrieval, terminology, chart, and sampling tools; it does not expose workflow or agent-registry tools.
+
+## Team dataset review
+
+The reviewable teacher batch and its grounding evidence are committed so collaborators can inspect them in GitHub:
+
+- `data/generated/teacher.jsonl` — generated teacher examples and review status
+- `data/generated/github-catalog-snapshot.json` — CRAFT evidence used for grounding
+- `artifacts/dataset/train.jsonl` — deterministic training split
+- `artifacts/dataset/validation.jsonl` — held-out split
+- `artifacts/dataset/manifest.json` — source hash, model, seed, and counts
+
+Reviewers should verify correctness, evidence references, policy decisions, tool outcomes, privacy, and absence of invented APIs before changing an example from `needs_review` to `passed`.
+
+The evaluation suite is visible in `evals/README.md` and `evals/qwythos-suite.json`. It shows the published Qwythos reference metrics, exact harness settings, tool-use criteria, and mandatory CRAFT promotion gates.
 
 ## Useful commands
 
