@@ -1,0 +1,1 @@
+"""Interchangeable teacher harness adapters."""

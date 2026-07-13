@@ -1,0 +1,12 @@
+{
+  "id": "tool-use",
+  "version": 1,
+  "description": "Measure tool selection, argument validity, permission behavior, and result grounding.",
+  "runner": "prompt-cases",
+  "required_for_promotion": true,
+  "minimum_samples": 50,
+  "metrics": [
+    {"id": "tool_selection_accuracy", "direction": "higher_is_better", "target": 0.9, "warning": 0.8, "rationale": "Workspace default requiring reliable tool routing."},
+    {"id": "argument_schema_validity", "direction": "must_equal", "target": 1.0, "warning": 1.0, "rationale": "Invalid calls cannot be executed safely."}
+  ]
+}

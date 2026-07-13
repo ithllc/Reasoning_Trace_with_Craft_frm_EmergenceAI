@@ -17,9 +17,9 @@ from mcp.types import ElicitRequestParams, ElicitResult
 
 ROOT = Path(__file__).resolve().parents[1]
 CODEX_CREDENTIALS = Path.home() / ".codex" / ".credentials.json"
-CRAFT_URL = "https://nebius.emergence.ai/mcp"
-PROJECT_ID = "8c5c41d7-19e0-45ba-8bf6-57fc2706bf1b"
-GITHUB_CONNECTION = "github-repos-8c5c41d7"
+CRAFT_URL = os.environ.get("CRAFT_TENANT_MCP_URL", "")
+PROJECT_ID = os.environ.get("CRAFT_PROJECT_ID", "")
+GITHUB_CONNECTION = os.environ.get("CRAFT_DEMO_CONNECTION", "synthetic-repositories")
 
 
 def oauth_token() -> str:
@@ -70,9 +70,15 @@ def content_json(result: Any) -> Any:
 
 
 async def run(command: str, output: Path | None = None) -> None:
+    if os.environ.get("CRAFT_CONNECTOR_ENABLED", "false").lower() != "true":
+        raise RuntimeError("CRAFT tenant connector is disabled; use public docs or enable it with current written authorization")
+    if os.environ.get("CRAFT_AUTHORIZATION_ATTESTED", "false").lower() != "true":
+        raise RuntimeError("CRAFT_AUTHORIZATION_ATTESTED=true is required for tenant access")
+    if not CRAFT_URL or not PROJECT_ID:
+        raise RuntimeError("CRAFT_TENANT_MCP_URL and CRAFT_PROJECT_ID are required")
     headers = {
         "Authorization": f"Bearer {oauth_token()}",
-        "X-Project-ID": os.environ.get("CRAFT_PROJECT_ID", PROJECT_ID),
+        "X-Project-ID": PROJECT_ID,
     }
     async with streamablehttp_client(CRAFT_URL, headers=headers) as (read, write, _):
         async with ClientSession(read, write, elicitation_callback=elicitation) as session:
@@ -112,9 +118,9 @@ async def run(command: str, output: Path | None = None) -> None:
                 selected_details = []
                 if command in {"dev-infrastructure", "digital-analytics"}:
                     selected_slugs = (
-                        {"firebase-8c5c41d7", "ga4-8c5c41d7"}
+                        {"synthetic-mobile", "synthetic-web"}
                         if command == "digital-analytics"
-                        else {GITHUB_CONNECTION, "deps-dev-v1-8c5c41d7"}
+                        else {GITHUB_CONNECTION, "deps-dev-v1-demo0000"}
                     )
                     for catalog in catalogs:
                         connection_item = catalog["connection"]

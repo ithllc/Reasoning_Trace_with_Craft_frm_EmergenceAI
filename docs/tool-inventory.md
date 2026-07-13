@@ -7,17 +7,13 @@ This separates platform interfaces from functions a trained model may choose to 
 | Surface | Use in this project | Access status |
 | --- | --- | --- |
 | Public documentation MCP (`emergence-craft`) | Ground teacher tasks in current CRAFT concepts and API documentation | Configured for documentation |
-| Hackathon tenant MCP (`craft`) | Project-scoped catalog/schema discovery and read-only query tooling | Connected through OAuth; re-login when expired |
-| Catalog tools | `list_data_connections`, `list_databases`, `get_schema`, and `search_schema` | Used to inventory all nine connections and snapshot Firebase/GA4 |
-| SQL/data tools | SQL generation, read-only execution, paging, terms, charts, and sampling | Available but not used to copy source rows into training data |
+| EmergeGPT CRAFT MCP | Public-doc search plus optional authorized tenant readiness/read tooling | Tenant capability disabled by default |
+| Catalog tools | Discovered at runtime from a separately authorized tenant | Omitted when unavailable or unauthorized |
+| SQL/data tools | Not part of the public product's default tool surface | Require separate documented authorization and policy review |
 | Assets service / SDK | Data connections, artifacts, files, models, and agent records | Documented surface; not directly used by this demo |
-| Agent-card validation and registry | Validate/select agent skills | Not exposed by the current tenant MCP tool list |
-| Pipeline/workflow framework | Stateful steps, run state, retries, outputs, cancellation | Trace design only; not exposed by the current tenant MCP tool list |
-| Governance/OpenFGA checks | Record authorization outcomes | Tenant connection required |
-| Secrets API | Resolve credentials without placing them in traces | Tenant connection required |
-| Langfuse and OpenTelemetry | LLM and cross-service operational traces | Deployment/configuration required |
+| Agent/workflow/governance capabilities | Use only when confirmed by current public docs and authorized runtime discovery | Never inferred from event access |
 
-CRAFT's public guide says there is no Backstage-style service catalog today. Do not invent one; use documented Assets and deployment identities until a target tenant exposes something more specific.
+Do not invent vendor APIs. Public documentation claims, runtime-discovered capabilities, synthetic EmergeGPT conventions, and tenant evidence must remain visibly distinct.
 
 ## Nebius Token Factory
 
@@ -34,6 +30,6 @@ CRAFT's public guide says there is no Backstage-style service catalog today. Do 
 | Custom LoRA deployment APIs | Validate and deploy eligible adapters |
 | Dedicated endpoints | Host eligible custom weights with controlled capacity |
 
-Nebius models emit tool-call instructions; the application executes the tool and returns its result. The initial model evaluation tool set is `python` and `web_search`, matching Qwythos's published custom harness. CRAFT-specific evaluation later adds read-only asset lookup, workflow status, agent discovery, and permission-check tools.
+Hosted models may emit tool-call instructions; the application executes only allowlisted tools and returns their results. EmergeGPT evaluations measure tool selection, JSON argument validity, grounding, permission behavior, and final-answer correctness through versioned project-owned cases.
 
 The active inference and fine-tuning model is `Qwen/Qwen3-30B-A3B-Instruct-2507`. Dashboard Q&A uses the base serverless model, not a trained LoRA checkpoint. The voice service enforces a local `$50` ledger; training uses separately configured wall-clock guards.

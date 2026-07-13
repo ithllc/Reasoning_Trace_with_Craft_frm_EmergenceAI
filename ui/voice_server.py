@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 import os
+import sys
 import threading
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -13,17 +14,11 @@ from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from emergegpt.db import Database  # noqa: E402
+from emergegpt.docs_index.indexer import build as build_docs, search as search_docs  # noqa: E402
+from emergegpt.settings import Settings  # noqa: E402
 LEDGER_LOCK = threading.Lock()
-KNOWLEDGE_FILES = (
-    "README.md",
-    "docs/architecture.md",
-    "docs/automation.md",
-    "docs/tool-inventory.md",
-    "docs/voice-assistant.md",
-    "config/pipeline.json",
-    "evals/README.md",
-    "evals/qwythos-suite.json",
-)
 
 
 def load_dotenv() -> None:
@@ -77,17 +72,16 @@ def token_cost(config: dict, input_tokens: int, output_tokens: int) -> float:
     ) / 1_000_000
 
 
-def project_knowledge() -> dict[str, str]:
-    """Load only explicitly approved project documentation and run metadata."""
-    paths = [ROOT / relative for relative in KNOWLEDGE_FILES]
-    paths.extend(sorted((ROOT / "evals" / "results").glob("*.json")))
-    for directory in ("artifacts/dataset", "artifacts/digital-analytics-dataset", "artifacts/digital-analytics-200-dataset"):
-        paths.extend(sorted((ROOT / directory).glob("manifest.json")))
-        paths.extend(sorted((ROOT / directory).glob("review.json")))
-    return {
-        str(path.relative_to(ROOT)): path.read_text(encoding="utf-8")
-        for path in paths if path.is_file()
-    }
+def project_knowledge(query: str | None = None) -> dict[str, str]:
+    """Retrieve approved, hash-indexed documentation; ignored/private/raw data never enters the catalog."""
+    app = Settings.load()
+    database = Database(app.database_path)
+    database.migrate()
+    manifest = build_docs(ROOT, database)
+    if not query:
+        return {item["path"]: item["sha256"] for item in manifest["sources"]}
+    results = search_docs(database, query, limit=12)
+    return {item["path"]: item["excerpt"] for item in results}
 
 
 def public_status(config: dict | None = None) -> dict:
@@ -126,11 +120,11 @@ def ask(question: str, config: dict | None = None) -> dict:
         "policy_outcomes": sorted({item.get("validation") for item in examples if item.get("validation")}),
     }
     dashboard_text = json.dumps(dashboard, separators=(",", ":"), ensure_ascii=True)
-    knowledge = project_knowledge()
+    knowledge = project_knowledge(question)
     knowledge_text = "\n\n".join(f"SOURCE: {path}\n{content}" for path, content in knowledge.items())
     messages = [
         {"role": "system", "content": (
-            "You explain the CRAFT Reasoning Lab dashboard and project architecture. Answer only from the supplied "
+            "You explain the EmergeGPT dashboard and project architecture. Answer only from the supplied "
             "dashboard JSON and whitelisted repository sources. Cite supporting repository paths inline in square "
             "brackets exactly once per claim, such as [docs/architecture.md]. Keep the entire answer under 300 words "
             "and use at most eight concise bullets. Distinguish features actually used, features merely available, "
@@ -232,7 +226,7 @@ class Handler(BaseHTTPRequestHandler):
 
 def main() -> None:
     server = ThreadingHTTPServer(("127.0.0.1", 8766), Handler)
-    print("Dashboard voice assistant: http://127.0.0.1:8766")
+    print("EmergeGPT voice assistant: http://127.0.0.1:8766")
     server.serve_forever()
 
 

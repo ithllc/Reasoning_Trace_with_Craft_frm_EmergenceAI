@@ -14,6 +14,9 @@ artifacts/*
 !artifacts/digital-analytics-200-dataset/
 !artifacts/digital-analytics-200-dataset/*.jsonl
 !artifacts/digital-analytics-200-dataset/*.json
+!artifacts/digital-analytics-1000-dataset/
+!artifacts/digital-analytics-1000-dataset/*.jsonl
+!artifacts/digital-analytics-1000-dataset/*.json
 runs/*
 !runs/.gitkeep
 data/generated/*
@@ -23,4 +26,10 @@ data/generated/*
 !data/generated/digital-analytics-catalogs.json
 !data/generated/digital-analytics-teacher.jsonl
 !data/generated/digital-analytics-200-teacher.jsonl
+!data/generated/digital-analytics-1000-teacher.jsonl
 data/private/
+planning/emergegpt-platform-plan.md
+planning/emergegpt-implementation-spec.md
+planning/Enterprise_Agents_Hackathon.pdf
+docs/security.md
+docs/licensing.md

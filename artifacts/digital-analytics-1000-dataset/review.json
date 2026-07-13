@@ -1,0 +1,16 @@
+{
+  "status": "approved_for_demo_training",
+  "authorization": "User explicitly requested the 1,000-example one-hour LoRA demo run on 2026-07-12.",
+  "review_method": "Deterministic template review plus automated validation of every generated row.",
+  "reviewed_examples": 1000,
+  "train_examples": 500,
+  "validation_examples": 500,
+  "unique_id_check": "passed",
+  "unique_prompt_check": "passed",
+  "split_disjoint_check": "passed",
+  "evidence_reference_check": "passed",
+  "secret_scan": "passed",
+  "hidden_reasoning_check": "passed",
+  "source_sha256": "47a6d54a330f53a999379035a69e464f97b060da9e76bd80840211f871ed0b1b",
+  "limitations": "Examples use fully synthetic mobile/web catalog identifiers and deterministic variations of ten reviewed policy templates, twenty scenarios, and five analysis windows. They contain no event tenant snapshot or source rows. Trace-level needs_review outcomes intentionally preserve production evidence gates. The 50% validation split measures template consistency and is not an independent generalization benchmark."
+}

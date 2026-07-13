@@ -1,79 +1,23 @@
-# LLM evaluations
+# EmergeGPT evaluation program
 
-The current evaluation program uses dataset-integrity checks, CRAFT evidence verification, privacy/secret scanning, bounded-job status, and Nebius train/validation loss. It has not executed the published Qwythos benchmarks and does not claim those reference values as project results.
+EmergeGPT uses project-owned, versioned evaluations. Training and validation loss are optimization diagnostics, not proof of task quality. Promotion requires matched base-versus-candidate prompts plus required safety, privacy, permission, grounding, tool-use, robustness, latency, and cost checks.
 
-## Qwythos suite retained as an unexecuted reference
+## Required evaluation families
 
-The reproducible public portion uses EleutherAI `lm-evaluation-harness`, the Hugging Face backend, chat templating, a 100-example limit, and sampling values `temperature=0.6`, `top_p=0.95`, and `top_k=20`.
+| Family | Example metrics | Default promotion interpretation |
+| --- | --- | --- |
+| Dataset integrity | schema validity, unique IDs, split disjointness, source hash | 100% required |
+| Evidence grounding | valid fixture/source references, citation support | 100% required references |
+| Safety and privacy | secret leakage, regulated rows, permission violations | zero tolerance |
+| Tool use | selection accuracy, argument schema validity, result grounding | versioned workspace target |
+| Domain task quality | independently authored held-out success rate | must meet target and not regress |
+| Robustness | injection resistance, refusal, malformed input handling | all required cases pass |
+| Efficiency | latency, input/output tokens, provider cost, cost per success | report with quality; never trade for safety |
 
-| Task | Metric | Qwythos reference |
-| --- | --- | ---: |
-| GSM8K | flexible exact match | 0.860 |
-| GSM8K | strict exact match | 0.810 |
-| MMLU | accuracy | 0.575 |
-| ARC Challenge | accuracy | 0.490 |
-| ARC Challenge | normalized accuracy | 0.410 |
-| GPQA Diamond CoT, zero-shot | flexible exact match | 0.580 |
+Every metric includes direction, warning/target/critical thresholds, rationale, sample count, and confidence interval. Binary rates use Wilson intervals; paired comparisons use paired bootstrap or another preregistered paired method. LLM judges pin the judge model, prompt, version, order randomization, and human-audited calibration sample.
 
-These values are historical references only. They were not used to evaluate any project checkpoint and are no longer displayed as current evaluation metrics in the dashboard. If this suite is run later, base and LoRA checkpoints must use identical settings.
+## Current historical diagnostics
 
-## Methods actually used
+The repository contains sanitized summaries of four proof-of-concept LoRA sessions. They remain `not_promoted` until an adapter is deployed and evaluated on identical held-out prompts. The latest 1,000-example run processed 408,285 tokens and completed under its wall-clock limit; its shared deterministic templates make validation loss a consistency signal rather than an independent generalization result.
 
-- deterministic JSONL validation, unique IDs, split counts, and source hashing;
-- verification that evidence references exist in the captured Firebase/GA4 metadata;
-- scanning for credential markers, raw source rows, and prohibited hidden reasoning;
-- Nebius job completion, trained steps/tokens, and wall-clock enforcement;
-- checkpoint training loss and validation loss.
-
-For the 200-example run, training loss moved from 6.0642 to 6.0544 and validation loss moved from 6.1477 to 5.9859. Lower is better within the same run. Because the 100/100 halves share ten deterministic templates, validation loss measures consistency rather than independent generalization.
-
-The base-versus-LoRA identical-prompt evaluation has not run because the adapter is not deployed. Until that happens, promotion remains blocked.
-
-Print the exact command:
-
-```bash
-python3 scripts/pipeline.py eval --model Qwen/Qwen3-30B-A3B-Instruct-2507
-```
-
-Execute it in an environment with `lm_eval`, the model weights, and sufficient GPU capacity:
-
-```bash
-python3 scripts/pipeline.py eval --model Qwen/Qwen3-30B-A3B-Instruct-2507 --run
-```
-
-## Tool-use evaluation
-
-Qwythos separately reports seven tool-use cases using Python execution and web search. We score tool selection, JSON argument validity, grounding in returned results, and final-answer correctness. Public source transcripts do not include a complete standalone runner, so this is tracked separately from the reproducible `lm_eval` tasks.
-
-## CRAFT evaluation
-
-Every candidate checkpoint must pass all held-out CRAFT cases:
-
-- evidence FQNs exist in the committed GitHub catalog snapshot;
-- missing freshness, quality, permission, or provenance blocks customer-facing use;
-- no tool or API is invented;
-- no private chain-of-thought is requested or emitted;
-- final answers are grounded in supplied tool results;
-- training and evaluation example IDs are disjoint.
-
-Results belong in `evals/results/` and should include the base-model result, LoRA result, configuration hash, dataset manifest hash, and promotion decision.
-
-The first LoRA pipeline-validation run succeeded as job `ftjob-a16a0aa96695477593c126598b12f88b` in 3 steps and 1,437 trained tokens. Its benchmark status remains pending and its promotion decision is `not_promoted` until the base and adapter complete the full suite.
-
-Checkpoint diagnostics improved modestly during that run: training loss decreased from 4.3062 to 4.2970 and validation loss decreased from 4.1036 to 4.0809. Lower loss is better, but these losses measure next-token prediction on the tiny train/validation splits; they are not GSM8K, MMLU, ARC, GPQA, or CRAFT benchmark scores.
-
-## Training-session history
-
-| Session | Split | Tokens | Final train loss | Final validation loss | Status |
-| --- | ---: | ---: | ---: | ---: | --- |
-| Initial pipeline validation | 2 / 1 | 1,437 | 4.2970 | 4.0809 | Succeeded; evaluation pending |
-| Digital Analytics small batch | 7 / 1 | 5,058 | 4.5051 | 4.1839 | Succeeded; evaluation pending |
-| Digital Analytics expanded batch | 100 / 100 | 76,875 | 6.0544 | 5.9859 | Succeeded; evaluation pending |
-
-Absolute loss values are not directly comparable as model-quality scores because each session used different data. The dashboard charts show within-session direction and cross-session values with this warning. A fair base-versus-LoRA evaluation still requires deploying the adapter and sending identical held-out prompts to both models with identical generation settings.
-
-## Sources
-
-- [Qwythos source model card](https://huggingface.co/empero-ai/Qwythos-9B-Claude-Mythos-5-1M)
-- [Qwythos tool-test transcript](https://huggingface.co/empero-ai/Qwythos-9B-Claude-Mythos-5-1M/blob/main/evals/tool_test_outputs.md)
-- [Machine-readable suite](qwythos-suite.json)
+New evaluation definitions belong in `evals/definitions/` and must validate against the evaluation schema before execution.

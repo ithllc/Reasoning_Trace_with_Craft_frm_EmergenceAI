@@ -1,0 +1,9 @@
+{
+  "id": "pairwise-base-candidate",
+  "version": 1,
+  "description": "Compare base and candidate on identical blinded prompts and settings.",
+  "runner": "pairwise",
+  "required_for_promotion": true,
+  "minimum_samples": 100,
+  "metrics": [{"id": "candidate_win_rate", "direction": "higher_is_better", "target": 0.55, "warning": 0.5, "rationale": "Initial practical-effect gate; calibrate with domain owners before production."}]
+}

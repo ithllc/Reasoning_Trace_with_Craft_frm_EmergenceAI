@@ -1,0 +1,9 @@
+{
+  "id": "dataset-integrity",
+  "version": 1,
+  "description": "Validate schema, identifiers, deterministic split, and source hashes.",
+  "runner": "builtin",
+  "required_for_promotion": true,
+  "minimum_samples": 1,
+  "metrics": [{"id": "integrity_pass_rate", "direction": "must_equal", "target": 1.0, "warning": 1.0, "rationale": "Malformed or non-reproducible training inputs are never promotable."}]
+}

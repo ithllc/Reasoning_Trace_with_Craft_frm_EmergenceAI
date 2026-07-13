@@ -1,0 +1,26 @@
+{
+  "job_id": "ftjob-8ae7abeefe1242b08eaf306b230df120",
+  "label": "Digital Analytics — 1,000 examples",
+  "session_order": 4,
+  "status": "succeeded",
+  "model": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+  "method": "LoRA",
+  "dataset_dir": "artifacts/digital-analytics-1000-dataset",
+  "dataset_manifest_sha256": null,
+  "public_sanitized_fixture_sha256": "47a6d54a330f53a999379035a69e464f97b060da9e76bd80840211f871ed0b1b",
+  "train_examples": 500,
+  "validation_examples": 500,
+  "trained_steps": 6,
+  "total_steps": 6,
+  "trained_tokens": 408285,
+  "duration_seconds": 515,
+  "time_limit_seconds": 3600,
+  "context_length": 8192,
+  "checkpoint_metrics": [
+    {"step": 2, "train_loss": 6.601328372955322, "validation_loss": 3.8359735012054443},
+    {"step": 4, "train_loss": 6.341038227081299, "validation_loss": 3.763371706008911},
+    {"step": 6, "train_loss": 6.121964454650879, "validation_loss": 3.7763607501983643}
+  ],
+  "evaluations": {"base_vs_lora": "pending_adapter_deployment", "promotion_decision": "not_promoted"},
+  "limitation": "This is a sanitized historical diagnostic summary. The original event-scoped dataset hash and tenant evidence are intentionally not distributed; the public synthetic fixture was regenerated independently and was not the exact input to this historical run. Validation loss is not an independent generalization benchmark."
+}

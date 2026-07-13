@@ -2,15 +2,15 @@
 
 ## Executive summary
 
-EmergeGPT is best positioned as a **governed model-improvement operating layer for repeated enterprise agent work**. It connects CRAFT catalog evidence to reviewed training examples, runs managed LoRA jobs through Nebius Token Factory, preserves immutable dataset and session history, and explains the system through a grounded dashboard assistant.
+EmergeGPT is best positioned as a **vendor-neutral governed model-improvement operating layer for repeated enterprise agent work**. It connects synthetic, public, or separately authorized evidence to reviewed training examples, runs provider-backed LoRA or full-parameter workflows, preserves immutable dataset/session history, and explains the system through grounded documentation Q&A.
 
 The commercial value is not “fine-tuning by itself.” Fine-tuning frameworks already exist. The value is making the full loop—evidence selection, trace design, review, reproducibility, training, monitoring, evaluation status, and audit—usable by enterprise data and AI teams.
 
 Current proof points:
 
-- all nine tenant data connections were inventoried and Firebase/GA4 were selected for Digital Analytics;
-- a 200-example deterministic dataset was versioned and split 100/100;
-- three Nebius LoRA jobs completed successfully;
+- the public dataset was regenerated from synthetic mobile/web evidence with no event tenant snapshot;
+- a 1,000-example deterministic dataset was versioned and split 500/500;
+- four Nebius LoRA jobs completed successfully;
 - the dashboard records datasets, loss, time limits, and session history;
 - voice/text Q&A is grounded in a 16-file repository allowlist.
 
@@ -18,7 +18,7 @@ Current limitation: no adapter has been promoted. Identical-prompt base-versus-L
 
 ## How an enterprise would use it
 
-1. **Select a governed domain.** Connect CRAFT to approved catalogs and define the business category, policies, owners, and permitted assets.
+1. **Select a governed domain.** Connect an authorized catalog/evidence provider—or synthetic fixtures—and define the business category, policies, owners, and permitted assets.
 2. **Capture reusable decisions.** Convert repeated agent tasks into concise, auditable examples containing evidence references, tool summaries, policy gates, and final decisions—not private chain-of-thought.
 3. **Review and version.** Human reviewers approve examples; manifests bind the source, model, seed, and split to a reproducible dataset.
 4. **Train economically.** Submit LoRA jobs through Nebius rather than operating a custom GPU stack for each experiment.
@@ -29,7 +29,7 @@ Likely enterprise use cases include governed conversational analytics, customer-
 
 ## Why enterprises care
 
-- **Governance:** CRAFT is designed around enterprise data, policies, permissions, proofs, and deployment control. It supports project isolation, authorization, secrets, catalog assets, workflows, and observability. [CRAFT introduction](https://docs.emergence.ai/getting-started/introduction)
+- **Governance:** EmergeGPT records evidence, policy, approval, evaluation, cost, and promotion decisions independently of the selected provider. Optional named connectors require separate authorization.
 - **Reproducibility:** Nebius Data Lab describes centralized, versioned datasets as a way to make experiments consistent, comparable, and safer to iterate. [Nebius Data Lab fine-tuning](https://docs.tokenfactory.nebius.com/data-lab/fine-tuning)
 - **Lower operating complexity:** Nebius exposes dataset upload, LoRA training, checkpoints, and custom adapter deployment through managed APIs. [Nebius supervised fine-tuning](https://docs.tokenfactory.nebius.com/post-training/how-to-fine-tune), [custom LoRA deployment](https://docs.tokenfactory.nebius.com/fine-tuning/deploy-custom-model)
 - **Potential economics:** a smaller or specialized model can reduce prompt complexity, latency, and inference cost for repeated tasks, but those savings must be proven with base-versus-adapter evaluation and production traffic.
@@ -55,7 +55,7 @@ Public comparators reinforce the distinction:
 
 ### Pricing guardrails
 
-- Quote implementation separately from Nebius/CRAFT consumption.
+- Quote implementation separately from provider consumption and connector licensing.
 - Put catalog count, example volume, evaluation cases, environments, integrations, and support hours in the statement of work.
 - Make production pricing contingent on a measured base-versus-adapter business result.
 - Do not price from token savings alone; include analyst time, audit preparation, incident reduction, and reuse across teams.
@@ -67,7 +67,7 @@ Public comparators reinforce the distinction:
 | Capability | EmergeGPT | Unsloth |
 | --- | --- | --- |
 | Primary job | Govern evidence-to-dataset-to-managed-training operations | Make local/model training and inference faster and more memory-efficient |
-| Catalog grounding | CRAFT Firebase/GA4 metadata and project-scoped evidence | Users provide or create datasets |
+| Catalog grounding | Synthetic/public/authorized evidence through provider adapters | Users provide or create datasets |
 | Review/audit | Manifests, review records, immutable completed runs, session history | Training observability and dataset tooling; enterprise governance is not the core claim |
 | Compute | Nebius-managed LoRA API | Local/cloud hardware chosen and operated by the user |
 | Model coverage/export | Current workflow targets one verified Qwen model; deployment pending | 500+ models, GGUF/safetensors export, local APIs, model arena |
@@ -84,7 +84,7 @@ The honest product strategy is complementary: EmergeGPT can remain the governed 
 Enterprise data metadata
         |
         v
-Emergence CRAFT ── catalog, policy, identity, evidence
+Authorized evidence provider ── catalog, policy, identity, evidence
         |
         v
 EmergeGPT ── trace templates, review, manifests, budgets, session history
@@ -99,7 +99,7 @@ Evaluation gate ── same prompts, base vs adapter, task + policy scores
 Approved deployment (pending in the current demo)
 ```
 
-CRAFT can deploy on customer-controlled infrastructure and provides enterprise platform services such as OIDC/PKCE, authorization, secrets, assets, workflows, and observability. [CRAFT introduction](https://docs.emergence.ai/getting-started/introduction)
+Named provider capabilities and deployment rights must be verified from current public documentation and the customer's own agreement. EmergeGPT does not bundle third-party platform rights.
 
 ## Buyer and ROI model
 
