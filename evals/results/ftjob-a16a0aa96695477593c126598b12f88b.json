@@ -31,7 +31,7 @@
     "packing": true
   },
   "evaluations": {
-    "qwythos_compatible_suite": "pending_checkpoint_evaluation",
+    "project_owned_suite": "pending_checkpoint_evaluation",
     "craft_held_out_suite": "pending_checkpoint_evaluation",
     "promotion_decision": "not_promoted"
   },

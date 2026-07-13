@@ -1,5 +1,5 @@
 {
-  "project": "Reasoning_Trace_with_Craft_frm_EmergenceAI",
+  "project": "EmergeGPT",
   "teacher": {
     "agent_name": "Sol",
     "requested_label": "Codex (GPT 5.6 Sol)",
@@ -16,19 +16,21 @@
   },
   "craft": {
     "documentation_mcp": "https://docs.emergence.ai/mcp",
-    "tenant_mcp": "https://nebius.emergence.ai/mcp",
-    "project_id": "8c5c41d7-19e0-45ba-8bf6-57fc2706bf1b",
-    "oauth_client_id": "em-runtime-mcp",
-    "demo_connection": "github-repos-8c5c41d7",
-    "digital_analytics_connections": ["firebase-8c5c41d7", "ga4-8c5c41d7"],
+    "tenant_mcp_env": "CRAFT_TENANT_MCP_URL",
+    "project_id_env": "CRAFT_PROJECT_ID",
+    "oauth_client_id_env": "CRAFT_OAUTH_CLIENT_ID",
+    "demo_connection": "synthetic-repositories",
+    "digital_analytics_connections": ["synthetic-mobile", "synthetic-web"],
     "domains": ["data_catalog", "workflow", "agent_registry"],
     "tenant_mutations_enabled": false
   },
   "nebius": {
     "base_url": "https://api.tokenfactory.nebius.com/v1/",
-    "project_id": "aiproject-e00g1a833vjes1bvhv",
+    "project_id_env": "NEBIUS_PROJECT_ID",
     "target_fine_tuning_supported_as_of_2026_07_11": true,
     "training": {
+      "training_mode": "lora",
+      "supported_training_modes": ["lora", "full"],
       "suffix": "craft-digital-analytics",
       "seed": 42,
       "validation_fraction": 0.5,
@@ -38,7 +40,6 @@
         "n_epochs": 3,
         "warmup_ratio": 0.0,
         "weight_decay": 0.0,
-        "lora": true,
         "lora_r": 16,
         "lora_alpha": 16,
         "lora_dropout": 0.05,

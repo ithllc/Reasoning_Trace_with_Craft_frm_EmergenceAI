@@ -14,8 +14,9 @@ DECK = ROOT / "docs" / "EmergeGPT_Deck_Updated.pptx"
 
 SLIDES = {
     1: {
+        "Turn CRAFT catalog evidence into reviewed datasets, managed LoRA runs, and auditable decisions.": "Turn authorized evidence into reviewed datasets, governed training runs, and auditable decisions.",
         "Distilling Grounded MCP Behavior into a Small, Locally-Served Model": "Governed Agent Learning for Enterprise Teams",
-        "A Craft MCP pipeline that fine-tunes a small model on real tool-use traces and serves it locally with llama.cpp.": "Turn CRAFT catalog evidence into reviewed datasets, managed LoRA runs, and auditable decisions.",
+        "A Craft MCP pipeline that fine-tunes a small model on real tool-use traces and serves it locally with llama.cpp.": "Turn authorized evidence into reviewed datasets, governed training runs, and auditable decisions.",
         "Teacher": "Catalog",
         "Traces": "Review",
         "Dataset": "LoRA",
@@ -33,9 +34,11 @@ SLIDES = {
         "“Every completed agent job contains potential training data.”": "“Model improvement should be reviewable, repeatable, and reversible.”",
     },
     3: {
+        "CRAFT Catalog Evidence": "Authorized Evidence",
         "From Teacher Traces to a Small, Local Model": "A Governed Path from Evidence to Model",
-        "Teacher + Craft MCP": "CRAFT Catalog Evidence",
-        "gpt-5.6-sol": "Firebase + GA4",
+        "Teacher + Craft MCP": "Authorized Evidence",
+        "gpt-5.6-sol": "Synthetic mobile + web",
+        "Firebase + GA4": "Synthetic mobile + web",
         "Record Trace": "Design Decision Traces",
         "calls, results, answer": "evidence, policy, answer",
         "Review & Split": "Review & Version",
@@ -49,8 +52,9 @@ SLIDES = {
         "MCP stays connected at runtime — fine-tuning captures tool-use behavior, not live Emergence data.": "Current: training complete. Next: deploy the adapter and prove improvement.",
     },
     4: {
+        "Firebase + GA4 evidence for engagement, conversion, retention, and data-policy decisions.": "Synthetic mobile + web evidence for engagement, conversion, retention, and policy decisions.",
         "What We Built": "Enterprise Control Plane — Working Today",
-        "Digital-catalog policy review — e.g. engagement trend, checkout abandonment, retention cohort, geographic rollup.": "Firebase + GA4 evidence for engagement, conversion, retention, and data-policy decisions.",
+        "Digital-catalog policy review — e.g. engagement trend, checkout abandonment, retention cohort, geographic rollup.": "Synthetic mobile + web evidence for engagement, conversion, retention, and policy decisions.",
         "TASK DOMAIN": "DIGITAL ANALYTICS",
         "INFRASTRUCTURE": "CURRENT PROOF",
         "3 Nebius fine-tuning jobs — all succeeded (3/3 steps)": "3 Nebius LoRA jobs — all succeeded",
@@ -79,10 +83,11 @@ SLIDES = {
         "The asset is the process: the same reviewable, versioned LoRA pipeline, validated at 3 examples and scaled cleanly to 200.": "Enterprises buy integration, governance, evaluation, and accountability—not GPU minutes alone.",
     },
     6: {
+        "CRAFT data and policy context": "Provider-neutral data and policy context",
         "05 · WHAT'S NEXT": "05 · WHY IT WINS",
         "What's Next": "Easier Governance—Not “Faster Kernels”",
         "DEPLOY & EVALUATE": "ENTERPRISE VALUE",
-        "Deploy the trained adapter": "CRAFT data and policy context",
+        "Deploy the trained adapter": "Provider-neutral data and policy context",
         "Run GSM8K, MMLU, ARC, GPQA, and CRAFT benchmarks": "Immutable reviews and run history",
         "Score teacher vs. student on held-out MCP tasks": "Managed Nebius training and budgets",
         "SCALE DELIBERATELY": "COMPLEMENTS UNSLOTH",
@@ -94,12 +99,12 @@ SLIDES = {
 }
 
 NOTES = {
-    1: "EmergeGPT is a governed operating layer for model improvement. It links CRAFT catalog evidence to reviewed datasets, managed Nebius LoRA runs, immutable history, and explainable operations. Current training is complete; adapter deployment and quality lift remain pending.",
+    1: "EmergeGPT is a vendor-neutral governed operating layer for model improvement. It links authorized evidence to reviewed datasets, provider-backed training, immutable history, and explainable operations. Deployment and measured quality lift remain gated.",
     2: "Enterprise buyers care because model changes are otherwise scattered across logs, notebooks, datasets, and cloud jobs. The business risk is not only model cost: it is unreproducible decisions, weak approval evidence, and no safe promotion path.",
-    3: "CRAFT supplies project-scoped Firebase and GA4 metadata. EmergeGPT turns reviewed policy templates into versioned data, submits LoRA through Nebius, and records results. It does not bake live rows into the model. Deployment and identical-prompt base-versus-adapter evaluation are the next gate. Sources: docs.emergence.ai/getting-started/introduction; docs.tokenfactory.nebius.com/post-training/how-to-fine-tune.",
-    4: "The current proof is operational, not a model-quality claim: three jobs succeeded; the current dataset has 200 deterministic examples split 100/100; the UI shows loss and immutable session history; voice Q&A cites an allowlist. The dataset is template-derived, not 200 live MCP execution traces.",
+    3: "The public demo uses synthetic mobile/web metadata. EmergeGPT turns reviewed policy templates into versioned data, submits capability-gated training through an authorized provider, and records results. It does not bundle tenant rows or third-party platform rights. Deployment and identical-prompt evaluation are the next gate.",
+    4: "The current proof is operational, not a model-quality claim: four historical jobs succeeded; the public dataset has 1,000 synthetic deterministic examples split 500/500; the UI shows diagnostics and immutable session history; Q&A uses an approved dynamic documentation index.",
     5: "These are proposed EmergeGPT service bands, not vendor quotes or observed market averages. Pilot: $50K–$125K. Production platform: $150K–$500K annually. Complex regulated rollout: $500K–$1.5M first year. Consumption is separate. Buyers pay for integration, policy design, evaluation, security, support, and accountability. Sources: nebius.com/token-factory/prices; aws.amazon.com/sagemaker/ai/pricing; unsloth.ai.",
-    6: "Unsloth is excellent at efficient local training, inference, broad model support, GGUF export, and lower VRAM. EmergeGPT does not replace or outperform those kernels. It simplifies a different layer: CRAFT-grounded evidence, review, managed Nebius jobs, history, budgets, and enterprise explanation. The products can be complementary. Source: unsloth.ai/docs.",
+    6: "Unsloth is excellent at efficient local training, inference, broad model support, GGUF export, and lower VRAM. EmergeGPT addresses a different layer: authorized evidence, review, provider-backed jobs, history, budgets, evaluations, and enterprise explanation. The products can be complementary. Source: unsloth.ai/docs.",
 }
 
 TEXT_RE = re.compile(rb"(<a:t>)(.*?)(</a:t>)", re.DOTALL)

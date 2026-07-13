@@ -5,8 +5,8 @@
   "secret_scan": "passed",
   "source_sha256": "fcce4763ccba3e53808be774cbde4e0fe26600467229b983bfbd066b849a8d6d",
   "scope": [
-    "firebase-8c5c41d7.FIREBASE",
-    "ga4-8c5c41d7.GA4"
+    "synthetic-mobile.FIREBASE",
+    "synthetic-web.GA4"
   ],
   "note": "Trace-level needs_review outcomes are retained intentionally where production authorization, data quality, date alignment, or metric definitions remain unresolved. The examples themselves are approved as safe demo training behavior."
 }

@@ -1,0 +1,9 @@
+{
+  "id": "evidence-grounding",
+  "version": 1,
+  "description": "Verify that cited synthetic/public evidence exists and supports the answer.",
+  "runner": "prompt-cases",
+  "required_for_promotion": true,
+  "minimum_samples": 30,
+  "metrics": [{"id": "valid_reference_rate", "direction": "must_equal", "target": 1.0, "warning": 1.0, "rationale": "Invented evidence violates the core audit contract."}]
+}

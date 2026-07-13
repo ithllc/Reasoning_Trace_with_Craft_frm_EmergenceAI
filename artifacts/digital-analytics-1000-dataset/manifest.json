@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-07-12T19:57:59.524451+00:00",
+  "seed": 42,
+  "source": "data/generated/digital-analytics-1000-teacher.jsonl",
+  "source_sha256": "47a6d54a330f53a999379035a69e464f97b060da9e76bd80840211f871ed0b1b",
+  "student_model": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+  "train_examples": 500,
+  "validation_examples": 500
+}

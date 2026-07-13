@@ -1,6 +1,18 @@
-# Emergence CRAFT Reasoning Trace Workspace
+# EmergeGPT
 
-This workspace designs auditable **Digital Analytics** reasoning traces with Codex teacher **Sol** (`gpt-5.6-sol`), the live Emergence.ai CRAFT hackathon MCP server, and Nebius Token Factory. It uses the CRAFT Firebase and GA4 catalogs and trains `Qwen/Qwen3-30B-A3B-Instruct-2507` with LoRA.
+## Demo video
+
+<video src="docs/media/emergegpt-demo.mp4" controls width="100%">
+  <a href="docs/media/emergegpt-demo.mp4">Watch the EmergeGPT demo video</a>.
+</video>
+
+[Watch or download the EmergeGPT demo video](docs/media/emergegpt-demo.mp4)
+
+![EmergeGPT dashboard showing model roles, harness readiness, and governed automation schedules](docs/media/emergegpt-dashboard.png)
+
+EmergeGPT is a vendor-neutral, auditable model-lifecycle control plane. It turns synthetic or separately authorized evidence into reviewed datasets, runs capability-gated LoRA or full-parameter training, compares model quality and cost, schedules evaluations, recommends when fine-tuning may help, and exposes interchangeable harness and MCP integrations.
+
+The UI includes license-evidenced Nebius teacher selection, matched base-versus-tuned cost savings, and a persisted Pipeline Runs console. A selected model harness receives the immutable run request and controls the compatible command sequence within EmergeGPT's approval and policy ceiling; the monitor survives page refreshes.
 
 Model decision: the original `Qwen/Qwen3.5-9B` is unavailable. The active student is `Qwen/Qwen3-30B-A3B-Instruct-2507`: it is visible to this API key and officially supports LoRA and full-parameter training. This project uses LoRA.
 
@@ -10,8 +22,7 @@ It now also contains a gated automation pipeline for distilling those traces int
 
 | Item | Location | Purpose |
 | --- | --- | --- |
-| Codex project configuration | `.codex/config.toml` | Connects this workspace to the CRAFT MCP server |
-| Codex user configuration | `/root/.codex/config.toml` | Makes the same MCP server available across local workspaces |
+| Codex project configuration | `.codex/config.toml` | Connects only to the public documentation MCP; live tenant configuration is local/generated |
 | Sol's standing instructions | `AGENTS.md` | Tells Codex how to work in this repository |
 | Architecture and vocabulary | `docs/architecture.md` | Explains the design in beginner-friendly language |
 | Trace contract | `schemas/reasoning-trace.schema.json` | Defines the shared auditable trace format |
@@ -20,15 +31,18 @@ It now also contains a gated automation pipeline for distilling those traces int
 | Fine-tuning configuration | `config/pipeline.json` | Pins teacher, student, CRAFT, Nebius, and eval settings |
 | Automation CLI | `scripts/pipeline.py` | Generates, validates, submits, monitors, and evaluates |
 | Local credentials | `.env` | Git-ignored, mode `0600`; never commit this file |
-| LLM evaluation suite | `evals/` | Qwythos-compatible benchmarks, CRAFT gates, and results |
-| Digital Analytics evidence | `data/generated/digital-analytics-catalogs.json` | Read-only Firebase/GA4 metadata snapshot |
-| Current teacher dataset | `data/generated/digital-analytics-200-teacher.jsonl` | 200 deterministic auditable examples |
-| Current split | `artifacts/digital-analytics-200-dataset/` | 100 training, 100 validation, manifest, and review |
+| LLM evaluation suite | `evals/` | Project-owned task, safety, grounding, tool-use, robustness, latency, and cost evaluations |
+| Digital Analytics evidence | generated synthetic fixtures | Public demo contains no event tenant snapshot or source rows |
+| Current teacher dataset | `data/generated/digital-analytics-1000-teacher.jsonl` | 1,000 deterministic auditable examples |
+| Current split | `artifacts/digital-analytics-1000-dataset/` | 500 training, 500 validation, manifest, and review |
 | Dashboard and voice UI | `ui/` | Session charts, dataset view, grounded Q&A, STT, and TTS |
+| MCP policy gateways | `emergegpt_mcp/` | CRAFT docs/authorization readiness and Nebius docs/API tools |
+| MCP Builder guide | `docs/mcp-builder.md` | Step-through UI setup, harness snippets, and safety boundaries |
+| Security and licensing | `docs/security.md`, `docs/licensing.md` | Productization gates, NDA/EULA boundary, and license recommendation |
 | Enterprise business case | `docs/enterprise-business-case.md` | Use cases, buyer value, proposed pricing, ROI, and Unsloth comparison |
 | Enterprise presentation | `docs/EmergeGPT_Deck_Updated.pptx` | Six-slide simplified executive narrative |
 
-The server is also registered in `/root/.codex/config.toml` under the name `emergence-craft`, so it is available outside this workspace too. That user file is managed by `codex mcp` commands; the project copy is the version-controlled declaration for this workspace.
+The project registers public documentation only. Live provider or tenant configuration is generated locally through the MCP Builder and is never committed automatically.
 
 ## Start here
 
@@ -38,43 +52,33 @@ The server is also registered in `/root/.codex/config.toml` under the name `emer
    cd /llm_models_python_code_src/emergence-craft-reasoning
    ```
 
-2. Confirm the server is registered:
+2. Create local environment configuration:
 
    ```bash
-   codex mcp list
+   cp .env.example .env
+   chmod 600 .env
    ```
 
-3. Authenticate the live CRAFT MCP once. This opens the Keycloak PKCE login; use the Google or Microsoft identity registered for the hackathon:
+3. Run tests and the local UI:
 
    ```bash
-   codex mcp login craft
+   python3 -m unittest discover -s tests -q
+   python3 ui/server.py
    ```
 
-4. Start a fresh Codex session from this directory. Project `.codex/config.toml` settings are loaded when the repository is trusted.
-
-5. Ask Sol to test the live project catalog:
-
-   > Sol, query all CRAFT data connections read-only and explain why Firebase and GA4 match the Digital Analytics category.
-
-6. Begin with one domain, preferably the Data Catalog:
-
-   > Sol, use the CRAFT docs and `schemas/reasoning-trace.schema.json` to draft the first Data Catalog trace in `examples/`. Clearly label assumptions and unresolved CRAFT API mappings.
+4. Open `http://127.0.0.1:8765` and use **Integrations → MCP Builder** to preview and validate CRAFT or Nebius policy gateways. A live CRAFT connector requires separate current written authorization and deployer-owned configuration.
 
 ## Connection details
 
-- Live server: `craft`
-- Live endpoint: `https://nebius.emergence.ai/mcp`
-- CRAFT project: `8c5c41d7-19e0-45ba-8bf6-57fc2706bf1b`
-- Scope header: `X-Project-ID`
-- Authentication: Keycloak PKCE, public client `em-runtime-mcp`
+- Live tenant endpoint/project/authentication: deployer-provided only after separate written authorization
+- Scope handling: environment-backed and redacted by the EmergeGPT CRAFT policy gateway
 - Documentation server: `emergence-craft` at `https://docs.emergence.ai/mcp`
-- Nebius project: `aiproject-e00g1a833vjes1bvhv`
+- Nebius project: `replace-with-your-project-id`
 - Nebius API: `https://api.tokenfactory.nebius.com/v1/`
 - Active category: Digital Analytics
-- Active catalogs: `firebase-8c5c41d7.FIREBASE` and `ga4-8c5c41d7.GA4`
-- Legacy first-demo catalog: `github-repos-8c5c41d7.GITHUB_REPOS`
+- Public demo catalogs: `synthetic-mobile.MOBILE_ANALYTICS` and `synthetic-web.WEB_ANALYTICS`
 
-The live CRAFT server is the hackathon's supported interface for project-scoped catalog, workflow, SQL, and agent tools. The separate documentation MCP is retained for public product documentation.
+Public CRAFT documentation access does not imply tenant/API authorization. EmergeGPT does not distribute event credentials, tenant endpoints, project IDs, platform data, or confidential implementation details.
 
 ## Fine-tuning workflow
 
@@ -88,43 +92,37 @@ chmod 600 .env
 Then run:
 
 ```bash
-python3 scripts/craft_mcp.py tools
-python3 scripts/craft_mcp.py digital-analytics --output data/generated/digital-analytics-catalogs.json
 python3 scripts/pipeline.py preflight-nebius
 python3 scripts/pipeline.py student-smoke
 python3 scripts/build_digital_analytics_seeds.py
-python3 scripts/pipeline.py prepare --input data/generated/digital-analytics-200-teacher.jsonl --output-dir artifacts/digital-analytics-200-dataset
-python3 scripts/pipeline.py submit --dataset-dir artifacts/digital-analytics-200-dataset
+python3 scripts/pipeline.py prepare --input data/generated/digital-analytics-1000-teacher.jsonl --output-dir artifacts/digital-analytics-1000-dataset
+python3 scripts/pipeline.py submit --training-mode lora --dataset-dir artifacts/digital-analytics-1000-dataset
 python3 scripts/pipeline.py monitor <job-id> --max-seconds 600
 python3 scripts/pipeline.py eval --model Qwen/Qwen3-30B-A3B-Instruct-2507
 ```
 
 Nebius model eligibility and the current dataset review pass. Each future dataset must still receive its own review record before upload.
 
-Run limits are explicit per session: the first demo used 15 minutes, the 8-example Digital Analytics run allowed 30 minutes, and the current 200-example run used a strict 10-minute limit. `monitor --max-seconds` cancels any job still active at its configured boundary.
+Run limits are explicit per session: the first demo used 15 minutes, the 8-example Digital Analytics run allowed 30 minutes, the 200-example run used 10 minutes, and the current 1,000-example run used a strict one-hour limit. `monitor --max-seconds` cancels any job still active at its configured boundary.
 
-The verified CRAFT GitHub snapshot currently contains one schema, six tables, and 30 columns. The first Sol batch contains catalog, workflow, and agent-registry examples. Examples without live CRAFT evidence are labeled `needs_review` and are not approved for training automatically. The hackathon MCP currently exposes catalog/schema, SQL generation and execution, result retrieval, terminology, chart, and sampling tools; it does not expose workflow or agent-registry tools.
+The public dataset uses fully synthetic mobile/web evidence identifiers. Authorized private deployments may build separate ignored snapshots through a connector they are legally permitted to use. Examples remain `needs_review` when dates, definitions, authorization, freshness, or quality evidence are missing.
 
-The second run inventories all nine project data connections and uses the two catalogs whose descriptions directly match Digital Analytics: `firebase-8c5c41d7.FIREBASE` for mobile-app interaction events and app-performance analysis, and `ga4-8c5c41d7.GA4` for e-commerce events, sessions, engagement, purchases, and conversions. The exact phrase search returned no tag-level matches, so selection is based on the catalogs' live database descriptions. The remaining seven catalogs are excluded because their stated purposes are commerce operations, blockchain, software dependencies, repositories, or medical research rather than digital interaction analytics.
-
-The current reproducible dataset contains 200 deterministic, catalog-grounded trace variations across ten policy/workflow templates and twenty scenarios. It is split exactly 100/100 between training and validation in `artifacts/digital-analytics-200-dataset/`. This large validation share checks template consistency; because both halves share templates, it must not be presented as an independent generalization benchmark.
+The current reproducible dataset contains 1,000 deterministic, catalog-grounded trace variations across ten policy/workflow templates, twenty scenarios, and five analysis windows. It is split exactly 500/500 between training and validation in `artifacts/digital-analytics-1000-dataset/`. This large validation share checks template consistency; because both halves share templates, it must not be presented as an independent generalization benchmark.
 
 ## Team dataset review
 
 The current teacher batch and grounding evidence are committed so collaborators can inspect them in GitHub:
 
-- `data/generated/digital-analytics-catalogs.json` — Firebase and GA4 catalog/schema evidence
-- `data/generated/digital-analytics-200-teacher.jsonl` — 200 generated trace examples
-- `artifacts/digital-analytics-200-dataset/train.jsonl` — 100-example training split
-- `artifacts/digital-analytics-200-dataset/validation.jsonl` — 100-example validation split
-- `artifacts/digital-analytics-200-dataset/manifest.json` — source hash, model, seed, and counts
-- `artifacts/digital-analytics-200-dataset/review.json` — approval and known limitations
+- synthetic mobile/web fixture identifiers generated by `scripts/build_digital_analytics_seeds.py`
+- `data/generated/digital-analytics-1000-teacher.jsonl` — 1,000 generated trace examples
+- `artifacts/digital-analytics-1000-dataset/train.jsonl` — 500-example training split
+- `artifacts/digital-analytics-1000-dataset/validation.jsonl` — 500-example validation split
+- `artifacts/digital-analytics-1000-dataset/manifest.json` — source hash, model, seed, and counts
+- `artifacts/digital-analytics-1000-dataset/review.json` — approval and known limitations
 
 Reviewers should verify correctness, evidence references, policy decisions, tool outcomes, privacy, and absence of invented APIs before changing an example from `needs_review` to `passed`.
 
-The evaluation suite is documented in `evals/README.md`. The dashboard shows only methods actually used: dataset integrity, CRAFT evidence grounding, privacy/secret checks, bounded execution, and checkpoint train/validation loss. `evals/qwythos-suite.json` remains an unexecuted historical reference.
-
-The displayed Qwythos values are references, not this project's results. A fair base-versus-LoRA comparison is still pending deployment of a checkpoint and identical held-out prompts/settings against both the base and adapter.
+The evaluation suite is documented in `evals/README.md`. The dashboard distinguishes methods actually run from planned definitions. A fair base-versus-tuned comparison remains pending deployment and identical held-out prompts/settings against both variants.
 
 ## Local management UI
 
@@ -134,7 +132,7 @@ Run the local-only dashboard:
 python3 ui/server.py
 ```
 
-Open `http://127.0.0.1:8765`. The UI shows the current 200-example dataset, live Nebius jobs, LoRA settings, immutable training-session history, per-session loss charts, cross-session final-loss comparison, and LLM evaluations. Completed dataset records are read-only in the UI, preventing approval-button experiments from changing historical training inputs. It binds only to localhost and never returns API keys or OAuth tokens.
+Open `http://127.0.0.1:8765`. The EmergeGPT UI shows the current 1,000-example dataset, live Nebius jobs, LoRA settings, immutable training-session history, per-session loss charts, cross-session final-loss comparison, and LLM evaluations. Completed dataset records are read-only in the UI, preventing approval-button experiments from changing historical training inputs. It binds only to localhost and never returns API keys or OAuth tokens.
 
 For dashboard-grounded voice Q&A, start a second subprocess:
 
@@ -146,18 +144,16 @@ The dashboard uses the browser Web Speech API for speech-to-text and text-to-spe
 
 Voice capabilities initialize during dashboard load. Separate indicators show whether Q&A inference, microphone/STT, and speaker/TTS are ready. Pressing **Ask by voice** starts the pre-initialized recognizer, and every successful answer is read aloud automatically; **Read answer** replays it.
 
-Architecture, catalog, and platform-feature questions use a whitelisted repository knowledge bundle containing the README, project guides, pipeline configuration, evaluation results, and dataset manifests/reviews. Answers cite repository paths and label features as used, available, or pending; credentials, raw datasets, and arbitrary files are excluded.
+Architecture, catalog, and platform-feature questions use the dynamic approved documentation index. New documentation becomes searchable after refresh; answers cite repository paths and label features as used, available, or pending. Credentials, private planning files, raw datasets, ignored paths, and arbitrary files are excluded.
 
 The first bounded LoRA pipeline-validation job, `ftjob-a16a0aa96695477593c126598b12f88b`, completed successfully in 3 steps and 1,437 trained tokens. It is not promoted until checkpoint evaluations pass; see `evals/results/`.
 
-Three sessions are recorded: the initial 3-example validation run, an 8-example Digital Analytics run, and the current 200-example run. The latest job `ftjob-4bfaa9ef51994ed5bd1924f58d686c2e` trained on 100 examples, validated on 100, processed 76,875 tokens, and succeeded in 509 seconds under its 600-second limit.
+Four sessions are recorded: the initial 3-example validation run, an 8-example Digital Analytics run, a 200-example run, and the current 1,000-example run. The latest job `ftjob-8ae7abeefe1242b08eaf306b230df120` trained on 500 examples, validated on 500, processed 408,285 tokens, and succeeded in 515 seconds under its 3,600-second limit. Its final recorded checkpoint had 6.1220 training loss and 3.7764 validation loss; these are training diagnostics, not proof of quality improvement.
 
 ## Useful commands
 
 ```bash
 codex mcp get emergence-craft
-codex mcp get craft
-codex mcp login craft
 codex mcp list
 codex mcp remove emergence-craft
 ```

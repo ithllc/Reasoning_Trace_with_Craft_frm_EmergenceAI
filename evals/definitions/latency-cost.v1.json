@@ -1,0 +1,9 @@
+{
+  "id": "latency-cost",
+  "version": 1,
+  "description": "Report matched latency, token usage, provider cost, and cost per successful task.",
+  "runner": "provider-usage",
+  "required_for_promotion": false,
+  "minimum_samples": 100,
+  "metrics": [{"id": "cost_per_success", "direction": "lower_is_better", "target": 1.0, "warning": 1.25, "rationale": "Normalized workspace index; safety and quality gates always take precedence."}]
+}

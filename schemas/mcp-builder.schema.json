@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://emergegpt.local/schemas/mcp-builder.schema.json",
+  "title": "EmergeGPT MCP Builder draft",
+  "type": "object",
+  "required": ["server_kind", "transport", "harnesses"],
+  "properties": {
+    "server_kind": {"enum": ["craft", "nebius"]},
+    "transport": {"enum": ["stdio", "loopback_http"]},
+    "harnesses": {"type": "array", "uniqueItems": true, "items": {"enum": ["codex", "claude_code", "opencode", "openclaw", "gemini_cli", "nemoclaw"]}},
+    "credential_reference": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]+$"},
+    "project_reference": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]+$"},
+    "mutations_enabled": {"type": "boolean", "default": false}
+  },
+  "additionalProperties": false
+}

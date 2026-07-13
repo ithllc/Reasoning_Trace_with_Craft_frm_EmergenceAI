@@ -19,6 +19,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from emergegpt.training import build_request as build_training_request
+
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CONFIG = ROOT / "config" / "pipeline.json"
 
@@ -293,16 +295,31 @@ CRAFT catalog snapshot: {catalog}
             seeds=json.dumps(seed_batch, ensure_ascii=False),
             catalog=json.dumps(catalog, ensure_ascii=False),
         )
-        cmd = [
-            "codex", "exec", "--ephemeral", "--sandbox", "read-only",
-            "--output-schema", str(ROOT / "schemas" / "teacher-batch.schema.json"),
-            "--output-last-message", str(raw), "-",
-        ]
-        model = os.environ.get(config["teacher"]["model_env"])
-        if model:
-            cmd[2:2] = ["--model", model]
-        subprocess.run(cmd, cwd=ROOT, input=prompt, text=True, check=True)
-        batch = load_json(raw)
+        if args.teacher_provider == "nebius":
+            model = args.teacher_model
+            if not model:
+                raise ValueError("--teacher-model is required for the Nebius teacher provider")
+            schema = load_json(ROOT / "schemas" / "teacher-batch.schema.json")
+            response = api_request("POST", "chat/completions", body=json.dumps({
+                "model": model, "messages": [{"role": "user", "content": prompt}],
+                "temperature": 0.2, "response_format": {"type": "json_schema", "json_schema": {
+                    "name": "emergegpt_teacher_batch", "strict": True, "schema": schema,
+                }},
+            }).encode(), content_type="application/json")
+            content = response["choices"][0]["message"]["content"]
+            batch = json.loads(content) if isinstance(content, str) else content
+            dump_json(raw, batch)
+        else:
+            cmd = [
+                "codex", "exec", "--ephemeral", "--sandbox", "read-only",
+                "--output-schema", str(ROOT / "schemas" / "teacher-batch.schema.json"),
+                "--output-last-message", str(raw), "-",
+            ]
+            model = os.environ.get(config["teacher"]["model_env"])
+            if model:
+                cmd[2:2] = ["--model", model]
+            subprocess.run(cmd, cwd=ROOT, input=prompt, text=True, check=True)
+            batch = load_json(raw)
         teacher = teacher or batch["teacher"]
         for example in batch["examples"]:
             rows.append({"messages": example["messages"], "metadata": {
@@ -373,18 +390,27 @@ def command_submit(args: argparse.Namespace) -> int:
     config = load_json(args.config)
     if not config["nebius"]["target_fine_tuning_supported_as_of_2026_07_11"]:
         raise RuntimeError(f"Blocked: Nebius does not currently document fine-tuning support for {config['student']['model']}. Re-verify official support before changing the gate.")
+    manifest = load_json(args.dataset_dir / "manifest.json")
+    review_path = args.dataset_dir / "review.json"
+    if not review_path.exists():
+        raise RuntimeError("Blocked: dataset review.json is required before upload")
+    review = load_json(review_path)
+    if review.get("status") != "approved_for_demo_training" or review.get("source_sha256") != manifest.get("source_sha256"):
+        raise RuntimeError("Blocked: dataset review is not approved or does not match the manifest source hash")
+    if (review.get("train_examples"), review.get("validation_examples")) != (manifest.get("train_examples"), manifest.get("validation_examples")):
+        raise RuntimeError("Blocked: review counts do not match the prepared dataset")
+    mode = args.training_mode or config["nebius"]["training"].get("training_mode", "lora")
+    if mode not in config["nebius"]["training"].get("supported_training_modes", ["lora"]):
+        raise RuntimeError(f"Blocked: {mode} is not an approved mode for this exact model profile")
     train_id = upload_file(args.dataset_dir / "train.jsonl")
     validation_path = args.dataset_dir / "validation.jsonl"
     validation_id = upload_file(validation_path) if validation_path.stat().st_size else None
-    request = {
-        "model": config["student"]["model"],
-        "suffix": config["nebius"]["training"]["suffix"],
-        "training_file": train_id,
-        "hyperparameters": config["nebius"]["training"]["hyperparameters"],
-        "seed": config["nebius"]["training"]["seed"],
-    }
-    if validation_id:
-        request["validation_file"] = validation_id
+    request = build_training_request(
+        exact_model=config["student"]["model"], training_file=train_id, validation_file=validation_id,
+        training_mode=mode, hyperparameters=config["nebius"]["training"]["hyperparameters"],
+        capabilities={"lora_supported": True, "full_supported": mode in config["nebius"]["training"]["supported_training_modes"]},
+        seed=config["nebius"]["training"]["seed"], suffix=config["nebius"]["training"]["suffix"],
+    )
     result = api_request("POST", "fine_tuning/jobs", body=json.dumps(request).encode(), content_type="application/json")
     run_dir = ROOT / "runs" / result["id"]
     dump_json(run_dir / "submission.json", {"request": request, "response": result})
@@ -470,6 +496,8 @@ def parser() -> argparse.ArgumentParser:
     generate.add_argument("--output", type=Path, default=ROOT / "data" / "generated" / "teacher.jsonl")
     generate.add_argument("--catalog", type=Path, default=ROOT / "data" / "generated" / "github-catalog-snapshot.json")
     generate.add_argument("--batch-size", type=int, default=10)
+    generate.add_argument("--teacher-provider", choices=["codex", "nebius"], default="codex")
+    generate.add_argument("--teacher-model")
     generate.set_defaults(func=command_generate)
     prepare = commands.add_parser("prepare")
     prepare.add_argument("--input", type=Path, required=True)
@@ -477,6 +505,7 @@ def parser() -> argparse.ArgumentParser:
     prepare.set_defaults(func=command_prepare)
     submit = commands.add_parser("submit")
     submit.add_argument("--dataset-dir", type=Path, default=ROOT / "artifacts" / "dataset")
+    submit.add_argument("--training-mode", choices=["lora", "full"])
     submit.set_defaults(func=command_submit)
     monitor = commands.add_parser("monitor")
     monitor.add_argument("job_id")

@@ -1,0 +1,11 @@
+{
+  "sources": [
+    {"id": "craft-public-docs", "owner": "Emergence AI", "url": "https://docs.emergence.ai/", "mode": "link_and_user_initiated_retrieval", "redistribute": false},
+    {"id": "craft-public-docs-mcp", "owner": "Emergence AI", "url": "https://docs.emergence.ai/mcp", "mode": "remote_mcp", "redistribute": false},
+    {"id": "nebius-token-factory-docs", "owner": "Nebius", "url": "https://docs.tokenfactory.nebius.com/", "mode": "link_and_user_initiated_retrieval", "redistribute": false},
+    {"id": "nebius-fine-tuning", "owner": "Nebius", "url": "https://docs.tokenfactory.nebius.com/post-training/how-to-fine-tune", "mode": "link_and_targeted_excerpt", "redistribute": false},
+    {"id": "openclaw-cli", "owner": "OpenClaw Foundation", "url": "https://docs.openclaw.ai/cli/agent", "mode": "link_and_targeted_excerpt", "redistribute": false},
+    {"id": "gemini-cli", "owner": "Google", "url": "https://google-gemini.github.io/gemini-cli/docs/cli/headless.html", "mode": "link_and_targeted_excerpt", "redistribute": false},
+    {"id": "nemoclaw", "owner": "NVIDIA", "url": "https://docs.nvidia.com/nemoclaw/latest/", "mode": "link_and_targeted_excerpt", "redistribute": false}
+  ]
+}

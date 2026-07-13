@@ -1,18 +1,17 @@
-# Architecture
+# EmergeGPT architecture
 
 ## The simple mental model
 
-Codex is the design environment and **Sol** is the teacher agent. The authenticated CRAFT tenant MCP supplies project-scoped catalog metadata; the public CRAFT MCP supplies product documentation. The repository stores read-only catalog snapshots, auditable traces, deterministic datasets, Nebius run records, and dashboard code.
+EmergeGPT is a vendor-neutral control plane. Interchangeable harnesses create auditable examples from synthetic, public, or separately authorized evidence. Provider adapters perform capability-gated training and inference; the repository stores synthetic fixtures, trace contracts, sanitized diagnostics, and application code.
 
 ```text
-You -> Sol in Codex -> authenticated CRAFT tenant MCP
-                 |                 |
-                 |                 +-> Firebase + GA4 metadata
-                 +-> 200 trace examples -> 100 train / 100 validation
-                                           |
-                                           +-> Nebius Qwen3 LoRA
-                                                        |
-                                                        +-> run history + UI
+User -> EmergeGPT UI/API -> workflow, approval, schedule, eval, cost, health
+                  |       -> documentation index + two MCP policy gateways
+                  |       -> Codex / Claude Code / OpenCode / OpenClaw / Gemini / NemoClaw
+                  |       -> authorized provider adapters
+                  v
+       synthetic reviewed examples -> train/validation -> LoRA or full tuning
+                                                     -> evaluation -> promotion gate
 ```
 
 ## What a reasoning trace means here
@@ -30,7 +29,7 @@ A reasoning trace is an auditable record of what an agent or workflow did. It in
 
 CRAFT's public documentation describes Assets for agents, data connections, artifacts, files, and models; Prefect-backed workflows in Data Governance; and A2A agent cards. The public solution guide also says there is not yet a Backstage-style service catalog. Therefore, the Service Registry design in this workspace is initially a proposed abstraction and must not be represented as an existing CRAFT API until the MCP documentation confirms one.
 
-The active demo category is **Digital Analytics**. All nine tenant connections were inventoried; Firebase and GA4 were selected from their live descriptions. Firebase supplies mobile-app interaction metadata, while GA4 supplies e-commerce events, sessions, engagement, purchase, and conversion metadata. No source rows are committed or used in traces.
+The active public demo category is **Digital Analytics** and uses synthetic mobile/web metadata only. No event tenant snapshot or source row is part of the public fixture. A named live connector is optional and requires the deployer's own current legal authorization and credentials.
 
 ## Trace lifecycle
 
@@ -44,10 +43,11 @@ The active demo category is **Digital Analytics**. All nine tenant connections w
 
 ## Current runtime boundaries
 
-- Tenant metadata access is authenticated with Keycloak PKCE and scoped by `X-Project-ID`.
-- Catalog discovery and schema retrieval are read-only.
+- Public documentation and live tenant authorization are separate capabilities.
+- CRAFT tenant access is disabled by default and fails closed without a current authorization attestation and deployer-owned scope.
+- Catalog discovery is synthetic unless a separately authorized connector is enabled.
 - Workflow and agent-registry operations in examples are proposed trace conventions unless a live tool proves otherwise.
 - Fine-tuning submission is an explicit Nebius mutation with a wall-clock cancellation guard.
 - Completed datasets and sessions are immutable in the dashboard.
-- The LoRA checkpoints are trained but not promoted; identical-prompt base-versus-LoRA evaluation remains pending adapter deployment.
+- Historical LoRA diagnostics are sanitized and not promoted; identical-prompt base-versus-candidate evaluation remains pending deployment.
 - Credentials remain only in ignored `.env` and Codex's OAuth cache.
