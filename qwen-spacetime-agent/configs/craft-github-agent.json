@@ -1,0 +1,19 @@
+{
+  "id": "craft-github-analyst",
+  "name": "Craft GitHub Analyst",
+  "model": "Qwen/Qwen3.5-9B",
+  "connection": "github-repos-99ae9869",
+  "schema": {
+    "schema_name": "GITHUB_REPOS",
+    "schema_fqn": "github-repos-99ae9869.GITHUB_REPOS.GITHUB_REPOS"
+  },
+  "tools": ["generate_sql", "execute_query", "get_result_page"],
+  "policy": {
+    "read_only": true,
+    "require_generate_sql": true,
+    "execute_generated_sql_unchanged": true,
+    "ground_answers_in_tool_results": true,
+    "record_decision_summaries": true,
+    "record_hidden_chain_of_thought": false
+  }
+}

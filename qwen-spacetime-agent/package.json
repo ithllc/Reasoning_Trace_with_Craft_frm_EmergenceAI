@@ -1,0 +1,28 @@
+{
+  "name": "qwen-spacetime-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": ["spacetimedb"],
+  "scripts": {
+    "agent": "tsx src/agent.ts",
+    "model:serve": "bash scripts/serve-llama.sh",
+    "check": "tsc --noEmit && tsc --noEmit -p spacetimedb/tsconfig.json",
+    "db:publish": "spacetime publish qwen-agent-jobs --module-path spacetimedb --server local -y",
+    "db:dev": "spacetime dev qwen-agent-jobs --project-path . --server-only -y",
+    "export": "bash scripts/export-training.sh",
+    "dataset:craft": "python training/build_craft_dataset.py data/craft-github-5-runs.raw.jsonl data/craft-github-5-runs.train.jsonl && python training/validate_dataset.py data/craft-github-5-runs.train.jsonl",
+    "train:qlora": "bash scripts/train-qlora.sh",
+    "train:gguf": "bash scripts/export-finetuned-gguf.sh"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "openai": "^6.15.0",
+    "spacetimedb": "2.4.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "tsx": "^4.21.0",
+    "typescript": "5.9.3"
+  }
+}
